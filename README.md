@@ -1,2 +1,3 @@
-# inventory-hunter
-⚡️ Get notified as soon as your next CPU/GPU is in stock
+# Inventory Hunter
+
+This bot helped me snag an RTX 3070.. hopefully it will help you get your hands on your next CPU or GPU.
