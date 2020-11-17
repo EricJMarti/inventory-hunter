@@ -39,8 +39,11 @@ class Engine:
         self.scheduler.run(blocking=True)
 
     def schedule(self, s):
-        delay = self.refresh_interval + (len(self.scheduler.queue) * self.refresh_interval)
-        self.scheduler.enter(delay, 1, Engine.tick, (self, s))
+        if self.scheduler.queue:
+            t = self.scheduler.queue[-1].time + self.refresh_interval
+            self.scheduler.enterabs(t, 1, Engine.tick, (self, s))
+        else:
+            self.scheduler.enter(self.refresh_interval, 1, Engine.tick, (self, s))
 
     def tick(self, s):
         if not s.scrape():
@@ -57,9 +60,8 @@ class Engine:
             self.alerter('Something went wrong',
                          f'You need to answer this CAPTCHA and restart this script: {s.url}')
             sys.exit(1)
-        elif s.has_phrase('out of stock'):
-            logging.info(f'{s.name}: not yet in stock')
 
+        logging.info(f'{s.name}: not yet in stock')
         return self.schedule(s)
 
 
