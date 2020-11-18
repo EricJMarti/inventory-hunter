@@ -1,6 +1,6 @@
 # Inventory Hunter
 
-This bot helped me snag an RTX 3070.. hopefully it will help you get your hands on your next CPU or GPU.
+This bot helped me snag an RTX 3070... hopefully it will help you get your hands on your next CPU or GPU.
 
 ## Requirements
 
@@ -40,7 +40,7 @@ Before developing inventory-hunter, I used several existing services without any
 
 ### What if inventory-hunter gets used by scalpers?
 
-I sure hope this doesn't happen.. 2020 is bad enough already. My hope is that inventory-hunter levels the playing field a bit by giving real customers a better opportunity than they had previously. Serious scalpers will continue using automated checkout bots, and it is up to online retailers to combat this malarkey.
+I sure hope this doesn't happen... 2020 is bad enough already. My hope is that inventory-hunter levels the playing field a bit by giving real customers a better opportunity than they had previously. Serious scalpers will continue using automated checkout bots, and it is up to online retailers to combat this malarkey.
 
 ### Do I really need Docker?
 
