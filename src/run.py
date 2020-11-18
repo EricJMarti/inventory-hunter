@@ -8,7 +8,7 @@ from hunter import hunt
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=argparse.FileType('r'), required=True, help='YAML config file')
+    parser.add_argument('-c', '--config', type=argparse.FileType('r'), default='/config.yaml', help='YAML config file')
     parser.add_argument('-e', '--email', required=True, help='recipient email address')
     parser.add_argument('-r', '--relay', required=True, help='IP address of SMTP relay')
     parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose logging')
