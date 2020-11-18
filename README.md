@@ -23,7 +23,10 @@ This has been tested on a Docker instance running on Raspberry Pi OS, but it *sh
 - [B&H Photo Video RTX 3070 config](config/bhphoto_rtx_3070.yaml)
 - [Micro Center RTX 3070 config](config/microcenter_rtx_3070.yaml)
 
-3. Start the Docker container, specifying the required arguments. See example `docker run` command in [docker_run.bash](docker_run.bash).
+3. Start the Docker container, specifying the required arguments. See example `docker run` command in [docker_run.bash](docker_run.bash) or run:
+```
+$ ./docker_run.bash -c <config_file> -e <email_address> -r <relay_ip_address>
+```
 
 ## How it works
 
