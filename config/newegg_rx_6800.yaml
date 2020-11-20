@@ -1,0 +1,9 @@
+---
+refresh_interval: 2 # seconds
+urls:
+  - https://www.newegg.com/asrock-radeon-rx-6800-rx-6800-16g/p/N82E16814930046
+  - https://www.newegg.com/asus-radeon-rx-6800-rx6800-16g/p/N82E16814126473
+  - https://www.newegg.com/gigabyte-radeon-rx-6800-gv-r68-16gc-b/p/N82E16814932374
+  - https://www.newegg.com/msi-radeon-rx-6800-rx-6800-16g/p/N82E16814137608
+  - https://www.newegg.com/sapphire-radeon-rx-6800-21305-01-20g/p/N82E16814202389
+...
