@@ -46,16 +46,17 @@ class Engine:
             self.scheduler.enter(self.refresh_interval, 1, Engine.tick, (self, s))
 
     def tick(self, s):
-        if not s.scrape():
+        result = s.scrape()
+        if not result:
             logging.error(f'{s.name}: scrape failed')
             return self.schedule(s)
 
         # not perfect but good enough
-        if s.has_phrase('add to cart'):
+        if result.has_add_to_cart():
             logging.info(f'{s.name}: in stock!')
             self.alerter('In Stock', str(s.url))
             return
-        elif s.has_phrase('are you a human'):
+        elif result.has_phrase('are you a human'):
             logging.error(f'{s.name}: got "are you a human" prompt')
             self.alerter('Something went wrong',
                          f'You need to answer this CAPTCHA and restart this script: {s.url}')
