@@ -37,7 +37,13 @@ if [ $retcode -ne 0 ]; then
 fi
 
 # docker requires absolute paths
-config=$(readlink -f $config)
+if [ "$(uname)" = "Darwin" ]; then
+    if [[ ! "$config" == /* ]]; then
+        config="$(pwd -P)/${config#./}"
+    fi
+else
+    config=$(readlink -f $config)
+fi
 
 docker run -d \
     --network host \
