@@ -1,18 +1,25 @@
-import datetime
-import logging
 import urllib
 import yaml
+
+
+class URL:
+    def __init__(self, url):
+        try:
+            result = urllib.parse.urlparse(url)
+            self.netloc = result.netloc
+            self.path = result.path
+            self.url = result.geturl()
+        except Exception:
+            raise Exception(f'invalid url: {url}')
+
+    def __repr__(self):
+        return self.url
 
 
 class Config:
     def __init__(self, refresh_interval, urls):
         self.refresh_interval = refresh_interval
-        self.urls = []
-        for url in urls:
-            try:
-                self.urls.append(urllib.parse.urlparse(url))
-            except Exception:
-                raise Exception(f'invalid url: {url}')
+        self.urls = [URL(url) for url in sorted(set(urls))]
 
 
 def parse_config(f):
