@@ -53,7 +53,7 @@ class Engine:
         # not perfect but good enough
         if s.has_phrase('add to cart'):
             logging.info(f'{s.name}: in stock!')
-            self.alerter('In Stock', s.url)
+            self.alerter('In Stock', s.url.geturl())
             return
         elif s.has_phrase('are you a human'):
             logging.error(f'{s.name}: got "are you a human" prompt')

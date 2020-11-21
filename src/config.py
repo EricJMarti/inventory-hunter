@@ -1,12 +1,18 @@
 import datetime
 import logging
+import urllib
 import yaml
 
 
 class Config:
     def __init__(self, refresh_interval, urls):
         self.refresh_interval = refresh_interval
-        self.urls = urls
+        self.urls = []
+        for url in urls:
+            try:
+                self.urls.append(urllib.parse.urlparse(url))
+            except Exception:
+                raise Exception(f'invalid url: {url}')
 
 
 def parse_config(f):
