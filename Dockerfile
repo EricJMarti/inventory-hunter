@@ -1,6 +1,6 @@
 FROM python:3.9
-WORKDIR /code
+WORKDIR /
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-COPY src/ .
-ENTRYPOINT ["python", "./run.py"]
+COPY src /src
+ENTRYPOINT ["python", "/src/run.py"]
