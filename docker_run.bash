@@ -25,12 +25,23 @@ done
 
 [ ! -f "$config" ] && usage "$config does not exist or is not a regular file"
 
+image="inventory-hunter"
+
+retcode=0
+(docker image inspect $image &> /dev/null) || retcode=1
+
+if [ $retcode -ne 0 ]; then
+    echo "the $image docker image does not exist... please build the image and try again"
+    echo "build command: docker build -t $image ."
+    exit 1
+fi
+
 # docker requires absolute paths
 config=$(readlink -f $config)
 
 docker run -d \
     --network host \
     -v $config:/config.yaml \
-    inventory-hunter \
+    $image \
     --email $email \
     --relay $relay
