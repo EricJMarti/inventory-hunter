@@ -10,13 +10,16 @@ This bot helped me snag an RTX 3070... hopefully it will help you get your hands
 
 ## Quick Start
 
+These steps *should* work on any supported Docker platform, but they have been specifically tested on Raspberry Pi OS with Docker already installed.
+
 1. Clone this repository and build a Docker image using the provided [Dockerfile](Dockerfile):
 ```
 $ git clone https://github.com/EricJMarti/inventory-hunter.git
 $ cd inventory-hunter
 $ docker build -t inventory-hunter .
 ```
-This has been tested on a Docker instance running on Raspberry Pi OS, but it *should* work on any supported Docker platform.
+
+Note: The `docker build` command may take a while to complete. 
 
 2. Create your own configuration file based on one of the provided examples:
 - [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
