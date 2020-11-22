@@ -17,7 +17,8 @@ class Alerter:
     def __call__(self, subject, content):
         msg = EmailMessage()
         msg.set_content(content)
-        msg['Subject'] = subject
+        if subject:
+            msg['Subject'] = subject
         msg['From'] = self.email
         msg['To'] = self.email
         s = smtplib.SMTP(self.relay)
@@ -47,19 +48,20 @@ class Engine:
 
     def tick(self, s):
         result = s.scrape()
-        if not result:
+
+        if result is None:
             logging.error(f'{s.name}: scrape failed')
             return self.schedule(s)
 
-        # not perfect but good enough
-        if result.has_add_to_cart():
+        elif result:
             logging.info(f'{s.name}: in stock!')
-            self.alerter('In Stock', str(s.url))
+            self.alerter(result.alert_subject, result.alert_content)
             return
-        elif result.has_phrase('are you a human'):
+
+        if result.has_phrase('are you a human'):
             logging.error(f'{s.name}: got "are you a human" prompt')
             self.alerter('Something went wrong',
-                         f'You need to answer this CAPTCHA and restart this script: {s.url}')
+                         f'You need to answer this CAPTCHA and restart this script: {result.url}')
             sys.exit(1)
 
         logging.info(f'{s.name}: not yet in stock')

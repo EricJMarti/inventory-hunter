@@ -2,9 +2,75 @@ import logging
 import pathlib
 import random
 import requests
-import urllib
 
 from bs4 import BeautifulSoup
+
+
+class ScrapeResult:
+    def __init__(self, r):
+        self.alert_subject = None
+        self.alert_content = None
+        self.soup = BeautifulSoup(r.text, 'lxml')
+        self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
+        self.url = r.url
+
+    def __bool__(self):
+        return bool(self.alert_content)
+
+    def has_phrase(self, phrase):
+        return phrase in self.content
+
+
+class GenericScrapeResult(ScrapeResult):
+    def __init__(self, r):
+        super().__init__(r)
+
+        # not perfect but usually good enough
+        if self.has_phrase('add to cart'):
+            self.alert_subject = 'In Stock'
+            self.alert_content = self.url
+
+
+class NeweggScrapeResult(ScrapeResult):
+    def __init__(self, r):
+        super().__init__(r)
+        alert_subject = 'In Stock'
+        alert_content = ''
+
+        # get name of product
+        tag = self.soup.body.find('h1', class_='product-title')
+        if tag:
+            alert_content += tag.text.strip() + '\n'
+        else:
+            logging.warning(f'missing title: {self.url}')
+
+        buy_box = self.soup.body.find('div', class_='product-buy-box')
+        if buy_box:
+
+            # get listed price
+            tag = buy_box.find('li', class_='price-current')
+            if tag:
+                alert_subject = f'In Stock for {tag.text.strip()}'
+            else:
+                logging.warning(f'missing price: {self.url}')
+
+            # check for add to cart button
+            tag = buy_box.find('div', class_='product-buy')
+            if tag:
+                if 'add to cart' in tag.text.lower():
+                    self.alert_subject = alert_subject
+                    self.alert_content = f'{alert_content.strip()}\n{self.url}'
+            else:
+                logging.warning(f'missing add to cart button: {self.url}')
+
+        else:
+            logging.warning(f'missing buy box: {self.url}')
+
+
+def get_result_type(url):
+    if 'newegg' in url.netloc:
+        return NeweggScrapeResult
+    return GenericScrapeResult
 
 
 def get_short_name(url):
@@ -21,30 +87,11 @@ def get_short_name(url):
     return f'unknown{random.randrange(100)}'
 
 
-class ScrapeResult:
-    def __init__(self, r):
-        self.response = r
-        self.content = self.response.text.lower()
-        self.soup = BeautifulSoup(self.response.text, 'lxml')
-
-    def has_add_to_cart(self):
-        phrase = 'add to cart'
-
-        if 'newegg' in self.response.url:
-            tag = self.soup.body.find(class_='product-buy-box')
-            if tag:
-                return phrase in str(tag).lower()
-
-        return self.has_phrase(phrase)
-
-    def has_phrase(self, phrase):
-        return phrase in self.content
-
-
 class Scraper:
     def __init__(self, url):
         self.content = None
         self.name = get_short_name(url)
+        self.result_type = get_result_type(url)
         self.url = url
 
         data_dir = pathlib.Path('data').resolve()
@@ -54,13 +101,13 @@ class Scraper:
 
     def scrape(self):
         try:
-            r = requests.get(str(self.url))
+            url = str(self.url)
+            r = requests.get(url)
 
             if r.ok:
-                result = ScrapeResult(r)
                 with self.filename.open('w') as f:
-                    f.write(result.soup.prettify())
-                return result
+                    f.write(r.text)
+                return self.result_type(r)
             else:
                 logging.error(f'got response with status code {r.status_code} from {self.url}')
 
