@@ -167,6 +167,7 @@ class Scraper:
         self.result_type = get_result_type(url)
         self.url = url
         self.timeout = timeout
+        self.in_stock_on_last_scrape = False
 
         data_dir = pathlib.Path('data').resolve()
         data_dir.mkdir(exist_ok=True)

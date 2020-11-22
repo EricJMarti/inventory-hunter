@@ -51,20 +51,25 @@ class Engine:
 
         if result is None:
             logging.error(f'{s.name}: scrape failed')
-            return self.schedule(s)
+
+        elif result and s.in_stock_on_last_scrape:
+            logging.info(f'{s.name}: still in stock')
 
         elif result:
-            logging.info(f'{s.name}: in stock!')
+            logging.info(f'{s.name}: now in stock!')
             self.alerter(result.alert_subject, result.alert_content)
-            return
+            s.in_stock_on_last_scrape = True
 
-        if result.has_phrase('are you a human'):
+        elif result.has_phrase('are you a human'):
             logging.error(f'{s.name}: got "are you a human" prompt')
             self.alerter('Something went wrong',
                          f'You need to answer this CAPTCHA and restart this script: {result.url}')
             sys.exit(1)
 
-        logging.info(f'{s.name}: not yet in stock')
+        else:
+            logging.info(f'{s.name}: not in stock')
+            s.in_stock_on_last_scrape = False
+
         return self.schedule(s)
 
 
