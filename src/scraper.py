@@ -32,6 +32,11 @@ class GenericScrapeResult(ScrapeResult):
             self.alert_content = self.url
 
 
+class BestBuyScrapeResult(ScrapeResult):
+    def __init__(self, r):
+        raise Exception('Best Buy is not supported yet :(')
+
+
 class BHPhotoScrapeResult(ScrapeResult):
     def __init__(self, r):
         super().__init__(r)
@@ -129,24 +134,28 @@ class NeweggScrapeResult(ScrapeResult):
 
 
 def get_result_type(url):
-    if 'newegg' in url.netloc:
-        return NeweggScrapeResult
+    if 'bestbuy' in url.netloc:
+        return BestBuyScrapeResult
     elif 'bhphoto' in url.netloc:
         return BHPhotoScrapeResult
     elif 'microcenter' in url.netloc:
         return MicroCenterScrapeResult
+    elif 'newegg' in url.netloc:
+        return NeweggScrapeResult
     return GenericScrapeResult
 
 
 def get_short_name(url):
     parts = [i for i in url.path.split('/') if i]
     if parts:
-        if 'newegg' in url.netloc:
-            return parts[0]
+        if 'bestbuy' in url.netloc:
+            return parts[1]
         elif 'bhphoto' in url.netloc:
             return parts[-1].replace('.html', '')
         elif 'microcenter' in url.netloc:
             return parts[-1]
+        elif 'newegg' in url.netloc:
+            return parts[0]
         return '_'.join(parts)
     random.seed()
     return f'unknown{random.randrange(100)}'
