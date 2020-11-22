@@ -1,6 +1,7 @@
 import logging
 import pathlib
 import random
+import re
 import requests
 
 from bs4 import BeautifulSoup
@@ -29,6 +30,66 @@ class GenericScrapeResult(ScrapeResult):
         if self.has_phrase('add to cart'):
             self.alert_subject = 'In Stock'
             self.alert_content = self.url
+
+
+class BHPhotoScrapeResult(ScrapeResult):
+    def __init__(self, r):
+        super().__init__(r)
+        alert_subject = 'In Stock'
+        alert_content = ''
+
+        # get name of product
+        tag = self.soup.body.find('div', class_=re.compile('title_.*'))
+        if tag:
+            alert_content += tag.text.strip() + '\n'
+        else:
+            logging.warning(f'missing title: {self.url}')
+
+        # get listed price
+        tag = self.soup.body.find('div', class_=re.compile('pricesContainer_.*'))
+        if tag:
+            alert_subject = f'In Stock for {tag.text.strip()}'
+        else:
+            logging.warning(f'missing price: {self.url}')
+
+        # check for add to cart button
+        tag = self.soup.body.find('button', class_=re.compile('toCartBtn.*'))
+        if tag and 'add to cart' in tag.text.lower():
+            self.alert_subject = alert_subject
+            self.alert_content = f'{alert_content.strip()}\n{self.url}'
+
+
+class MicroCenterScrapeResult(ScrapeResult):
+    def __init__(self, r):
+        super().__init__(r)
+        alert_subject = 'In Stock'
+        alert_content = ''
+
+        details = self.soup.body.find('div', id='details', class_='inline')
+        if details:
+
+            # get name of product
+            tag = details.select_one('h1 span')
+            if tag:
+                alert_content += tag.text.strip() + '\n'
+            else:
+                logging.warning(f'missing title: {self.url}')
+
+            # get listed price
+            tag = details.select_one('div#options-pricing')
+            if tag:
+                alert_subject = f'In Stock for {tag.text.strip()}'
+            else:
+                logging.warning(f'missing price: {self.url}')
+
+            # check for add to cart button
+            tag = details.select_one('aside#cart-options form')
+            if tag and 'add to cart' in str(tag).lower():
+                self.alert_subject = alert_subject
+                self.alert_content = f'{alert_content.strip()}\n{self.url}'
+
+        else:
+            logging.warning(f'missing details div: {self.url}')
 
 
 class NeweggScrapeResult(ScrapeResult):
@@ -70,6 +131,10 @@ class NeweggScrapeResult(ScrapeResult):
 def get_result_type(url):
     if 'newegg' in url.netloc:
         return NeweggScrapeResult
+    elif 'bhphoto' in url.netloc:
+        return BHPhotoScrapeResult
+    elif 'microcenter' in url.netloc:
+        return MicroCenterScrapeResult
     return GenericScrapeResult
 
 
