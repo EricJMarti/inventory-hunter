@@ -153,11 +153,11 @@ def get_short_name(url):
 
 
 class Scraper:
-    def __init__(self, url):
-        self.content = None
+    def __init__(self, url, timeout):
         self.name = get_short_name(url)
         self.result_type = get_result_type(url)
         self.url = url
+        self.timeout = timeout
 
         data_dir = pathlib.Path('data').resolve()
         data_dir.mkdir(exist_ok=True)
@@ -167,7 +167,7 @@ class Scraper:
     def scrape(self):
         try:
             url = str(self.url)
-            r = requests.get(url)
+            r = requests.get(url, timeout=self.timeout)
 
             if r.ok:
                 with self.filename.open('w') as f:
@@ -177,4 +177,4 @@ class Scraper:
                 logging.error(f'got response with status code {r.status_code} from {self.url}')
 
         except Exception as e:
-            logging.exception(f'{self.name}: caught exception during request: {e}')
+            logging.error(f'{self.name}: caught exception during request: {e}')

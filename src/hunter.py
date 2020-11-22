@@ -32,7 +32,7 @@ class Engine:
         self.alerter = Alerter(args)
         self.refresh_interval = config.refresh_interval
         self.scheduler = sched.scheduler()
-        self.scrapers = [Scraper(url) for url in config.urls]
+        self.scrapers = [Scraper(url, self.refresh_interval) for url in config.urls]
         for s in self.scrapers:
             self.schedule(s)
 
