@@ -1,9 +1,14 @@
 import argparse
+import locale
 import logging
 import sys
 
 from config import parse_config
 from hunter import hunt
+
+
+# required for price parsing logic
+locale.setlocale(locale.LC_ALL, '')
 
 
 def parse_args():
@@ -23,10 +28,10 @@ def main():
     try:
         config = parse_config(args.config)
         hunt(args, config)
-    except Exception as e:
+    except Exception:
         logging.exception('caught exception')
         sys.exit(1)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
