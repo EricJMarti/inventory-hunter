@@ -1,3 +1,4 @@
+import locale
 import logging
 import pathlib
 import random
@@ -11,6 +12,7 @@ class ScrapeResult:
     def __init__(self, r):
         self.alert_subject = None
         self.alert_content = None
+        self.price = None
         self.soup = BeautifulSoup(r.text, 'lxml')
         self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
         self.url = r.url
@@ -20,6 +22,21 @@ class ScrapeResult:
 
     def has_phrase(self, phrase):
         return phrase in self.content
+
+    def set_price(self, tag):
+        if not tag:
+            return
+
+        price_str = tag.text.strip()
+        if not price_str:
+            return
+
+        try:
+            currency_symbol = locale.localeconv()['currency_symbol']
+            self.price = locale.atof(price_str.replace(currency_symbol, '').strip())
+            return price_str if price_str else None
+        except Exception as e:
+            logging.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
 
 
 class GenericScrapeResult(ScrapeResult):
@@ -52,8 +69,9 @@ class BHPhotoScrapeResult(ScrapeResult):
 
         # get listed price
         tag = self.soup.body.find('div', class_=re.compile('pricesContainer_.*'))
-        if tag:
-            alert_subject = f'In Stock for {tag.text.strip()}'
+        price_str = self.set_price(tag)
+        if price_str:
+            alert_subject = f'In Stock for {price_str}'
         else:
             logging.warning(f'missing price: {self.url}')
 
@@ -81,9 +99,10 @@ class MicroCenterScrapeResult(ScrapeResult):
                 logging.warning(f'missing title: {self.url}')
 
             # get listed price
-            tag = details.select_one('div#options-pricing')
-            if tag:
-                alert_subject = f'In Stock for {tag.text.strip()}'
+            tag = details.find('div', id='options-pricing')
+            price_str = self.set_price(tag)
+            if price_str:
+                alert_subject = f'In Stock for {price_str}'
             else:
                 logging.warning(f'missing price: {self.url}')
 
@@ -115,8 +134,9 @@ class NeweggScrapeResult(ScrapeResult):
 
             # get listed price
             tag = buy_box.find('li', class_='price-current')
-            if tag:
-                alert_subject = f'In Stock for {tag.text.strip()}'
+            price_str = self.set_price(tag)
+            if price_str:
+                alert_subject = f'In Stock for {price_str}'
             else:
                 logging.warning(f'missing price: {self.url}')
 
@@ -168,6 +188,7 @@ class Scraper:
         self.url = url
         self.timeout = timeout
         self.in_stock_on_last_scrape = False
+        self.price_on_last_scrape = None
 
         data_dir = pathlib.Path('data').resolve()
         data_dir.mkdir(exist_ok=True)
