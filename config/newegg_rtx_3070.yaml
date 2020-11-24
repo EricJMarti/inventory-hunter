@@ -1,5 +1,6 @@
 ---
 refresh_interval: 2 # seconds
+max_price: 650 # dollars/euros/etc
 urls:
   - https://www.newegg.com/gigabyte-geforce-rtx-2070-super-gv-n207swf3oc-8gd/p/N82E16814932213 # this one is a test
   - https://www.newegg.com/asus-geforce-rtx-3070-dual-rtx3070-8g/p/N82E16814126460
