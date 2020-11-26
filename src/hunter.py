@@ -9,7 +9,8 @@ from scraper import Scraper
 
 class Alerter:
     def __init__(self, args):
-        self.email = args.email
+        self.sender = args.email[0]
+        self.recipients = args.email
         self.relay = args.relay
 
         # self('Testing relay', 'You can delete this message.')
@@ -19,12 +20,11 @@ class Alerter:
         msg.set_content(content)
         if subject:
             msg['Subject'] = subject
-        msg['From'] = self.email
-        msg['To'] = self.email
-        s = smtplib.SMTP(self.relay)
-        logging.debug(f'sending email with subject: {subject}')
-        s.send_message(msg)
-        s.quit()
+        msg['From'] = self.sender
+        msg['To'] = ', '.join(self.recipients)
+        with smtplib.SMTP(self.relay) as s:
+            logging.debug(f'sending email: subject: {subject}')
+            s.send_message(msg)
 
 
 class Engine:
