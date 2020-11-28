@@ -4,6 +4,7 @@ import smtplib
 import sys
 
 from email.message import EmailMessage
+from email.utils import formatdate
 from scraper import Scraper
 
 
@@ -17,6 +18,7 @@ class Alerter:
 
     def __call__(self, subject, content):
         msg = EmailMessage()
+        msg.add_header('Date', formatdate())
         msg.set_content(content)
         if subject:
             msg['Subject'] = subject
