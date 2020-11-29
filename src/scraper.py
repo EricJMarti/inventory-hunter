@@ -5,7 +5,6 @@ import random
 import re
 
 from bs4 import BeautifulSoup
-from driver import get_driver
 
 
 class ScrapeResult:
@@ -182,12 +181,11 @@ def get_short_name(url):
 
 
 class Scraper:
-    def __init__(self, url, timeout):
-        self.driver = get_driver(timeout)
+    def __init__(self, driver, url):
+        self.driver = driver
         self.name = get_short_name(url)
         self.result_type = get_result_type(url)
         self.url = url
-        self.timeout = timeout
         self.in_stock_on_last_scrape = False
         self.price_on_last_scrape = None
 
@@ -200,13 +198,9 @@ class Scraper:
         try:
             url = str(self.url)
             r = self.driver.get(url)
-
-            if r.ok:
-                with self.filename.open('w') as f:
-                    f.write(r.text)
-                return self.result_type(r)
-            else:
-                logging.error(f'got response with status code {r.status_code} from {self.url}')
+            with self.filename.open('w') as f:
+                f.write(r.text)
+            return self.result_type(r)
 
         except Exception as e:
             logging.error(f'{self.name}: caught exception during request: {e}')

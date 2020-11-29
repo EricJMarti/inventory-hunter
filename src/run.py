@@ -4,6 +4,7 @@ import logging
 import sys
 
 from config import parse_config
+from driver import init_driver
 from hunter import hunt
 
 
@@ -27,7 +28,8 @@ def main():
 
     try:
         config = parse_config(args.config)
-        hunt(args, config)
+        driver = init_driver(config)
+        hunt(args, config, driver)
     except Exception:
         logging.exception('caught exception')
         sys.exit(1)

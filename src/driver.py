@@ -2,40 +2,39 @@ import getpass
 import logging
 import os
 import requests
-import subprocess
 
 from selenium import webdriver
 
 
+class HttpGetResponse:
+    def __init__(self, text, url):
+        self.text = text
+        self.url = url
+
+
 class SeleniumDriver:
     def __init__(self, timeout):
-        self.chromium = None
+        self.driver = None
 
-        chromium_path = '/usr/bin/chromium'
-        if not os.path.exists(chromium_path):
-            raise Exception(f'not found: {chromium_path}')
+        driver_path = '/usr/bin/chromedriver'
+        if not os.path.exists(driver_path):
+            raise Exception(f'not found: {driver_path}')
 
-        chromium_cmd = [chromium_path]
+        options = webdriver.ChromeOptions()
+        options.headless = True
         if getpass.getuser() == 'root':
-            chromium_cmd.append('--no-sandbox')  # required if root
+            options.add_argument('--no-sandbox')  # required if root
 
-        self.chromium = subprocess.Popen(chromium_cmd)
-        self.driver = webdriver.Chrome()
-        self.driver.implicitly_wait(self.timeout)
+        self.driver = webdriver.Chrome(driver_path, options=options)
+        self.driver.implicitly_wait(timeout)
 
     def __del__(self):
-        if self.chromium is None:
-            return
-        if self.chromium.poll() is not None:
-            return
-        self.chromium.terminate()
-        try:
-            self.chromium.wait(1)
-        except subprocess.TimeoutExpired:
-            self.chromium.kill()
+        if self.driver is not None:
+            self.driver.quit()
 
     def get(self, url):
-        return self.driver.get(url)
+        self.driver.get(url)
+        return HttpGetResponse(self.driver.page_source, url)
 
 
 class RequestsDriver:
@@ -43,10 +42,14 @@ class RequestsDriver:
         self.timeout = timeout
 
     def get(self, url):
-        return requests.get(url, timeout=self.timeout)
+        r = requests.get(url, timeout=self.timeout)
+        if not r.ok:
+            raise Exception(f'got response with status code {r.status_code} for {url}')
+        return HttpGetResponse(r.text, r.url)
 
 
-def get_driver(timeout):
+def init_driver(config):
+    timeout = config.refresh_interval
     try:
         return SeleniumDriver(timeout)
     except Exception as e:

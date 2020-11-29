@@ -30,12 +30,12 @@ class Alerter:
 
 
 class Engine:
-    def __init__(self, args, config):
+    def __init__(self, args, config, driver):
         self.alerter = Alerter(args)
         self.refresh_interval = config.refresh_interval
         self.max_price = config.max_price
         self.scheduler = sched.scheduler()
-        self.scrapers = [Scraper(url, self.refresh_interval) for url in config.urls]
+        self.scrapers = [Scraper(driver, url) for url in config.urls]
         for s in self.scrapers:
             self.schedule(s)
 
@@ -116,6 +116,6 @@ class Engine:
         self.alerter(result.alert_subject, result.alert_content)
 
 
-def hunt(args, config):
-    engine = Engine(args, config)
+def hunt(args, config, driver):
+    engine = Engine(args, config, driver)
     engine.run()
