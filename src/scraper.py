@@ -3,9 +3,9 @@ import logging
 import pathlib
 import random
 import re
-import requests
 
 from bs4 import BeautifulSoup
+from driver import get_driver
 
 
 class ScrapeResult:
@@ -183,6 +183,7 @@ def get_short_name(url):
 
 class Scraper:
     def __init__(self, url, timeout):
+        self.driver = get_driver(timeout)
         self.name = get_short_name(url)
         self.result_type = get_result_type(url)
         self.url = url
@@ -198,7 +199,7 @@ class Scraper:
     def scrape(self):
         try:
             url = str(self.url)
-            r = requests.get(url, timeout=self.timeout)
+            r = self.driver.get(url)
 
             if r.ok:
                 with self.filename.open('w') as f:
