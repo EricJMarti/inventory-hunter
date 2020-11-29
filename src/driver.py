@@ -50,9 +50,4 @@ class RequestsDriver:
 
 def init_driver(config):
     timeout = config.refresh_interval
-    try:
-        return SeleniumDriver(timeout)
-    except Exception as e:
-        logging.error(f'caught exception during selenium driver init: {e}')
-        logging.warning('falling back to requests module')
-        return RequestsDriver(timeout)
+    return RequestsDriver(timeout)
