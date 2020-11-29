@@ -45,9 +45,27 @@ else
     config=$(readlink -f $config)
 fi
 
+container_name=$(basename $config)
+container_name=${container_name%.yaml}
+
 docker run -d \
+    --name $container_name \
     --network host \
     -v $config:/config.yaml \
     $image \
     --email ${emails[@]} \
     --relay $relay
+
+docker_ps_cmd="docker ps -a -f name=$container_name"
+
+echo
+echo "started docker container named $container_name"
+echo
+echo "view the status of this container using the following command:"
+echo "\$ $docker_ps_cmd"
+echo
+eval $docker_ps_cmd
+echo
+echo "view logs for this container using the following command:"
+echo "\$ docker logs -f $container_name"
+echo
