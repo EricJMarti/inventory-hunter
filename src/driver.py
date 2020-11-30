@@ -14,27 +14,27 @@ class HttpGetResponse:
 
 class SeleniumDriver:
     def __init__(self, timeout):
-        self.driver = None
+        self.timeout = timeout
 
-        driver_path = '/usr/bin/chromedriver'
-        if not os.path.exists(driver_path):
-            raise Exception(f'not found: {driver_path}')
+        self.driver_path = '/usr/bin/chromedriver'
+        if not os.path.exists(self.driver_path):
+            raise Exception(f'not found: {self.driver_path}')
 
-        options = webdriver.ChromeOptions()
-        options.headless = True
+        self.options = webdriver.ChromeOptions()
+        self.options.headless = True
         if getpass.getuser() == 'root':
-            options.add_argument('--no-sandbox')  # required if root
-
-        self.driver = webdriver.Chrome(driver_path, options=options)
-        self.driver.implicitly_wait(timeout)
-
-    def __del__(self):
-        if self.driver is not None:
-            self.driver.quit()
+            self.options.add_argument('--no-sandbox')  # required if root
 
     def get(self, url):
-        self.driver.get(url)
-        return HttpGetResponse(self.driver.page_source, url)
+        # headless chromium crashes somewhat regularly...
+        # for now, we will start a fresh instance every time
+        driver = webdriver.Chrome(self.driver_path, options=self.options)
+        try:
+            driver.get(url)
+            return HttpGetResponse(driver.page_source, url)
+        finally:
+            driver.close()
+            driver.quit()
 
 
 class RequestsDriver:
@@ -48,6 +48,19 @@ class RequestsDriver:
         return HttpGetResponse(r.text, r.url)
 
 
+def try_init_selenium_driver(timeout):
+    logging.warning('warning: using selenium webdriver for scraping... this feature is under active development')
+    try:
+        return SeleniumDriver(timeout)
+    except Exception as e:
+        logging.error(f'caught exception during selenium driver init: {e}')
+        logging.warning('falling back to requests module')
+        return RequestsDriver(timeout)
+
+
 def init_driver(config):
     timeout = config.refresh_interval
+    for url in config.urls:
+        if 'bestbuy' in url.netloc:
+            return try_init_selenium_driver(timeout)
     return RequestsDriver(timeout)
