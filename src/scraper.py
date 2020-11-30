@@ -50,7 +50,30 @@ class GenericScrapeResult(ScrapeResult):
 
 class BestBuyScrapeResult(ScrapeResult):
     def __init__(self, r):
-        raise Exception('Best Buy is not supported yet :(')
+        super().__init__(r)
+        alert_subject = 'In Stock'
+        alert_content = ''
+
+        # get name of product
+        tag = self.soup.body.find('div', class_='sku-title')
+        if tag:
+            alert_content += tag.text.strip() + '\n'
+        else:
+            logging.warning(f'missing title: {self.url}')
+
+        # get listed price
+        tag = self.soup.body.select_one('div.priceView-customer-price > span')
+        price_str = self.set_price(tag)
+        if price_str:
+            alert_subject = f'In Stock for {price_str}'
+        else:
+            logging.warning(f'missing price: {self.url}')
+
+        # check for add to cart button
+        tag = self.soup.body.find('div', class_='fulfillment-add-to-cart-button')
+        if tag and 'add to cart' in tag.text.lower():
+            self.alert_subject = alert_subject
+            self.alert_content = f'{alert_content.strip()}\n{self.url}'
 
 
 class BHPhotoScrapeResult(ScrapeResult):
