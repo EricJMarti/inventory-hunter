@@ -4,7 +4,11 @@ import os
 import requests
 
 from selenium import webdriver
-
+#This code is for haveing a record of the viewers
+person =("Enter your name: ")
+print(f"hello {person})
+list = []
+list.append(person)
 
 class HttpGetResponse:
     def __init__(self, text, url):
@@ -64,3 +68,4 @@ def init_driver(config):
         if 'bestbuy' in url.netloc:
             return try_init_selenium_driver(timeout)
     return RequestsDriver(timeout)
+
