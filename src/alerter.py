@@ -1,13 +1,10 @@
 import logging
-import sys
+import requests
 import smtplib
 import traceback
 
 from email.message import EmailMessage
 from email.utils import formatdate
-
-import requests
-
 
 
 class AlerterBase:
@@ -68,7 +65,8 @@ class SlackAlerter(AlerterBase):
         except Exception:
             logging.error(
                 f"Issue with sending webhook to slack. {traceback.format_exc()}"
-            )        
+            )
+
 
 class DiscordAlerter(AlerterBase):
     def __init__(self, args):
@@ -104,7 +102,7 @@ class EmailAlerter(AlerterBase):
     def __init__(self, args):
         self.sender = args.email[0]
         self.recipients = args.email
-        self.relat = args.relay
+        self.relay = args.relay
         super().__init__(args)
 
     def _notification_function(self, **kwargs):
