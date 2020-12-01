@@ -5,7 +5,7 @@ import sys
 
 from email.message import EmailMessage
 from email.utils import formatdate
-from scraper import Scraper
+from scraper import init_scrapers
 
 from alerter import EmailAlerter, DiscordAlerter
 
@@ -22,7 +22,7 @@ class Engine:
         self.refresh_interval = config.refresh_interval
         self.max_price = config.max_price
         self.scheduler = sched.scheduler()
-        self.scrapers = [Scraper(driver, url) for url in config.urls]
+        self.scrapers = init_scrapers(driver, config.urls)
         for s in self.scrapers:
             self.schedule(s)
 
@@ -48,20 +48,22 @@ class Engine:
 
     def process_scrape_result(self, s, result):
         currently_in_stock = bool(result)
+        previously_in_stock = result.previously_in_stock
         current_price = result.price
+        last_price = result.last_price
 
-        if currently_in_stock and s.in_stock_on_last_scrape:
+        if currently_in_stock and previously_in_stock:
 
             # if no pricing is available, we'll assume the price hasn't changed
-            if current_price is None or s.price_on_last_scrape is None:
+            if current_price is None or last_price is None:
                 logging.info(f'{s.name}: still in stock')
 
             # is the current price the same as the last price? (most likely yes)
-            elif current_price == s.price_on_last_scrape:
+            elif current_price == last_price:
                 logging.info(f'{s.name}: still in stock at the same price')
 
             # has the price gone down?
-            elif current_price < s.price_on_last_scrape:
+            elif current_price < last_price:
 
                 if self.max_price is None or current_price <= self.max_price:
                     self.send_alert(s, result, f'now in stock at {current_price}!')
@@ -71,7 +73,7 @@ class Engine:
             else:
                 logging.info(f'{s.name}: now in stock at {current_price}... more expensive than before :(')
 
-        elif currently_in_stock and not s.in_stock_on_last_scrape:
+        elif currently_in_stock and not previously_in_stock:
 
             # if no pricing is available, we'll assume the price is low enough
             if current_price is None:
@@ -93,10 +95,6 @@ class Engine:
 
         else:
             logging.info(f'{s.name}: not in stock')
-
-        # cache current state
-        s.in_stock_on_last_scrape = currently_in_stock
-        s.price_on_last_scrape = current_price
 
     def send_alert(self, s, result, reason):
         logging.info(f'{s.name}: {reason}')
