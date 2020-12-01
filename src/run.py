@@ -19,11 +19,21 @@ from hunter import hunt
 
 def parse_args():
     parser = argparse.ArgumentParser()
+
+
+
     parser.add_argument('-c', '--config', type=argparse.FileType('r'), default='/config.yaml', help='YAML config file')
+    parser.add_argument('-a', '--alerter', required=True, help="Alert system to be used", default="email", dest="alerter_type")
+    
     parser.add_argument('-e', '--email', nargs='+', help='recipient email address(es)')
-    parser.add_argument('-r', '--relay', required=True, help='IP address of SMTP relay')
+    parser.add_argument('-r', '--relay', help='IP address of SMTP relay')
     parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose logging')
+    
+    
+    # discord (or any other webhook based alerter) - related arguments
+    parser.add_argument("-w", "--webhook", help="A valid HTTP url for a POST request.", dest="webhook_url")
     return parser.parse_args()
+    
 
 
 def main():
