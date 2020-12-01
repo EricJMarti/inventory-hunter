@@ -1,4 +1,4 @@
-# import logging
+import logging
 import sys
 import smtplib
 import traceback
@@ -8,7 +8,6 @@ from email.utils import formatdate
 
 import requests
 
-from loguru import logger as logging
 
 
 class AlerterBase:
