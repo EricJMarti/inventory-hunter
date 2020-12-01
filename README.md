@@ -1,6 +1,6 @@
 # Inventory Hunter
 
-This bot helped me snag an RTX 3070... hopefully it will help you get your hands on your next CPU or GPU.
+This bot helped me snag an RTX 3070... hopefully it will help you get your hands on your next CPU, GPU, or game console.
 
 ## Requirements
 
@@ -19,21 +19,41 @@ $ cd inventory-hunter
 $ docker build -t inventory-hunter .
 ```
 
-Note: The `docker build` command may take a while to complete. 
+Note: The `docker build` command may take a while to complete. If you experience issues building your Docker image, please try again using this build command:
+
+```
+$ docker build --build-arg requirements=requirements_lite.txt -t inventory-hunter .
+```
 
 2. Create your own configuration file based on one of the provided examples:
 - [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
 - [B&H Photo Video RTX 3070 config](config/bhphoto_rtx_3070.yaml)
 - [Micro Center RTX 3070 config](config/microcenter_rtx_3070.yaml)
 
-3. Start the Docker container, specifying the required arguments. See example `docker run` command in [docker_run.bash](docker_run.bash) or run:
+3. Start the Docker container, specifying the required arguments. See the example `docker run` command in [docker_run.bash](docker_run.bash) or run:
 ```
 $ ./docker_run.bash -c <config_file> -e <email_address> -r <relay_ip_address>
+```
+
+For example:
+
+```
+$ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -e myemail@email.com -r 127.0.0.1
 ```
 
 ## How it works
 
 The general idea is if you can get notified as soon as a product becomes in stock, you might have a chance to purchase it before scalpers clear out inventory. This script continually refreshes a set of URLs, looking for the "add to cart" phrase. Once detected, an automated email is sent, giving you an opportunity to react.
+
+## Known issues
+
+### SMTP
+
+Some users are having trouble getting an SMTP relay configured. I am working to address this by providing alternative solutions such as Discord.
+
+### Support for other retailers
+
+Currently, only B&H, Micro Center, and Newegg have been tested, so YMMV for other retailers. Lots of users requested support for Amazon and Best Buy, but unfortunately, these retailers have web scraping protections built into their websites. I am currently developing a workaround. I am also working on a guide to help users develop their own scraper plugins.
 
 ## FAQ
 
@@ -50,4 +70,4 @@ I sure hope this doesn't happen... 2020 is bad enough already. My hope is that i
 
 ### Do I really need Docker?
 
-No (but YMMV). If you know your way around python and pip/conda, then you should be able to replicate the environment I created using Docker.
+No, but I highly recommend it. If you know your way around python and pip/conda, then you should be able to replicate the environment I created using Docker.
