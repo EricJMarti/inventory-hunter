@@ -31,6 +31,45 @@ class AlerterTest(AlerterBase):
         logging.debug(f"notification function kwargs: {kwargs}")
 
 
+class SlackAlerter(AlerterBase):
+    def __init__(self, args):
+        self._webhook_url = args.webhook_url
+        super().__init__(args)
+
+    def _notification_function(self, **kwargs):
+        _slack_webhook_generated = {
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Inventory Hunter* :mega:"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "plain_text",
+                        "text": kwargs.get("content")
+                    }
+                }
+            ]
+        }
+        try:
+            logging.debug(f"Slack Webhook URL: {self._webhook_url}")
+            send_request = requests.post(
+                self._webhook_url,
+                json=_slack_webhook_generated,
+            )
+            if send_request.status_code != 200 and send_request.text == "ok":
+                logging.error(
+                    f"There was an issue sending to slack due to an invalid request: {send_request.status_code} -> {send_request.text}"
+                )
+        except Exception:
+            logging.error(
+                f"Issue with sending webhook to slack. {traceback.format_exc()}"
+            )        
+
 class DiscordAlerter(AlerterBase):
     def __init__(self, args):
         self._webhook_url = args.webhook_url
