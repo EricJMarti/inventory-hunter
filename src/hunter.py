@@ -7,14 +7,15 @@ from email.message import EmailMessage
 from email.utils import formatdate
 from scraper import init_scrapers
 
-from alerter import EmailAlerter, DiscordAlerter
+from alerter import EmailAlerter, DiscordAlerter, SlackAlerter
 
 class Engine:
     def __init__(self, args, config, driver):
 
         alert_types = {
             "email": EmailAlerter,
-            "discord": DiscordAlerter
+            "discord": DiscordAlerter,
+            "slack": SlackAlerter
         }
         self.alerter = alert_types[args.alerter_type](args)
         logging.debug(f"selected alerter: {args.alerter_type} -> {self.alerter}")
