@@ -20,8 +20,6 @@ class AmazonScrapeResult(ScrapeResult):
         price_str = self.set_price(tag)
         if price_str:
             alert_subject = f'In Stock for {price_str}'
-        else:
-            logging.warning(f'missing price: {self.url}')
 
         # check for add to cart button
         tag = self.soup.body.select_one('span.a-button-inner > span#submit\\.add-to-cart-announce')
