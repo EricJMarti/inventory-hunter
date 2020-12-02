@@ -37,6 +37,7 @@ $ docker build --build-arg requirements=requirements_lite.txt -t inventory-hunte
 
 2. Create your own configuration file based on one of the provided examples:
 
+- [Best Buy RTX 3060 Ti config](config/bestbuy_rtx_3060_ti.yaml)
 - [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
 - [B&H Photo Video RTX 3070 config](config/bhphoto_rtx_3070.yaml)
 - [Micro Center RTX 3070 config](config/microcenter_rtx_3070.yaml)
