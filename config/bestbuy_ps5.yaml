@@ -1,0 +1,8 @@
+---
+refresh_interval: 2 # seconds
+max_price: 550
+urls:
+  # Sony PS5
+  - https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149
+  - https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161
+...
