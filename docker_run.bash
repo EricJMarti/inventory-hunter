@@ -10,20 +10,27 @@ usage() {
 
 [ $# -eq 0 ] && usage
 
-while getopts c:e:r: arg
+alerter="email"
+while getopts a:c:e:r:w: arg
 do
     case "${arg}" in
+        a) alerter=${OPTARG};;
         c) config=${OPTARG};;
         e) emails+=(${OPTARG});;
         r) relay=${OPTARG};;
+        w) webhook=${OPTARG};;
     esac
 done
 
 [ -z "$config" ] && usage "missing config argument"
-[ -z "$emails" ] && usage "missing email argument"
-[ -z "$relay" ] && usage "missing relay argument"
-
 [ ! -f "$config" ] && usage "$config does not exist or is not a regular file"
+
+if [ "$alerter" = "email" ]; then
+    [ -z "$emails" ] && usage "missing email argument"
+    [ -z "$relay" ] && usage "missing relay argument"
+else
+    [ -z "$webhook" ] && usage "missing webhook argument"
+fi
 
 image="inventory-hunter"
 
@@ -48,16 +55,18 @@ fi
 container_name=$(basename $config)
 container_name=${container_name%.yaml}
 
-docker run -d \
-    --name $container_name \
-    --network host \
-    -v $config:/config.yaml \
-    $image \
-    --email ${emails[@]} \
-    --relay $relay
+docker_run_cmd="docker run -d --name $container_name --network host -v $config:/config.yaml $image --alerter $alerter"
+
+if [ "$alerter" = "email" ]; then
+    docker_run_cmd="$docker_run_cmd --email ${emails[@]} --relay $relay"
+else
+    docker_run_cmd="$docker_run_cmd --webhook $webhook"
+fi
 
 docker_ps_cmd="docker ps -a -f name=$container_name"
 
+# echo "\$ $docker_run_cmd"
+eval $docker_run_cmd
 echo
 echo "started docker container named $container_name"
 echo
