@@ -42,4 +42,4 @@ class AmazonScraper(Scraper):
     def generate_short_name(url):
         parts = [i for i in url.path.split('/') if i]
         if parts:
-            return parts[0]
+            return parts[2]
