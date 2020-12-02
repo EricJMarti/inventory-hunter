@@ -1,4 +1,5 @@
 ---
+refresh_interval: 2 # seconds
 max_price: 500 # dollars
 urls:
   - https://www.bestbuy.com/site/gigabyte-nvidia-geforce-rtx-3060-ti-eagle-oc-8g-gddr6-pci-express-4-0-graphics-card-black/6442485.p?skuId=6442485
