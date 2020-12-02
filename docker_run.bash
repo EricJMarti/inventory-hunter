@@ -52,8 +52,7 @@ else
     config=$(readlink -f $config)
 fi
 
-container_name=$(basename $config)
-container_name=${container_name%.yaml}
+container_name=$(basename $config .yaml)
 
 docker_run_cmd="docker run -d --name $container_name --network host -v $config:/config.yaml $image --alerter $alerter"
 

@@ -1,0 +1,8 @@
+---
+refresh_interval: 2 # seconds
+max_price: 750 # dollars
+urls:
+  - https://www.newegg.com/p/N82E16868110292
+  - https://www.newegg.com/p/N82E16868110293
+  - https://www.newegg.com/p/N82E16868110291
+...
