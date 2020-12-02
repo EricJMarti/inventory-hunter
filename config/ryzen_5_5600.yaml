@@ -1,0 +1,10 @@
+---
+max_price: 400 # dollars/euros/etc
+refresh_interval: 2 # seconds
+urls:
+  - https://www.newegg.com/amd-ryzen-5-5600x/p/N82E16819113666?Item=N82E16819113666&Tpk=19-113-666
+  - https://www.amazon.com/AMD-Ryzen-5600X-12-Thread-Processor/dp/B08166SLDF
+  - https://www.bhphotovideo.com/c/product/1598377-REG/amd_100_100000065box_ryzen_5_5600x_3_7.html
+  - https://www.bestbuy.com/site/amd-ryzen-5-5600x-4th-gen-6-core-12-threads-unlocked-desktop-processor-with-wraith-stealth-cooler/6438943.p?skuId=6438943
+  - https://www.microcenter.com/product/630285/amd-ryzen-5-5600x-vermeer-37ghz-6-core-am4-boxed-processor-with-wraith-stealth-cooler
+...
