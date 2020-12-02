@@ -42,7 +42,8 @@ class RequestsDriver:
         self.timeout = timeout
 
     def get(self, url):
-        r = requests.get(url, timeout=self.timeout)
+        headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36'}
+        r = requests.get(url, headers=headers, timeout=self.timeout)
         if not r.ok:
             raise Exception(f'got response with status code {r.status_code} for {url}')
         return HttpGetResponse(r.text, r.url)
@@ -60,7 +61,4 @@ def try_init_selenium_driver(timeout):
 
 def init_driver(config):
     timeout = config.refresh_interval
-    for url in config.urls:
-        if 'bestbuy' in url.netloc:
-            return try_init_selenium_driver(timeout)
     return RequestsDriver(timeout)
