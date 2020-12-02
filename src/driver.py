@@ -61,4 +61,7 @@ def try_init_selenium_driver(timeout):
 
 def init_driver(config):
     timeout = config.refresh_interval
+    for url in config.urls:
+        if 'amazon' in url.netloc:
+            return try_init_selenium_driver(timeout)
     return RequestsDriver(timeout)

@@ -1,3 +1,4 @@
+import scraper.amazon
 import scraper.bestbuy
 import scraper.bhphotovideo
 import scraper.microcenter
