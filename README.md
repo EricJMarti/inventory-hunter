@@ -37,10 +37,11 @@ $ docker build --build-arg requirements=requirements_lite.txt -t inventory-hunte
 
 2. Create your own configuration file based on one of the provided examples:
 
+- [Amazon RTX 3080 config](config/amazon_rtx_3080.yaml)
 - [Best Buy RTX 3060 Ti config](config/bestbuy_rtx_3060_ti.yaml)
-- [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
 - [B&H Photo Video RTX 3070 config](config/bhphoto_rtx_3070.yaml)
 - [Micro Center RTX 3070 config](config/microcenter_rtx_3070.yaml)
+- [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
 
 3. Start the Docker container using the provided `docker_run.bash` script, specifying the required arguments.
 
@@ -73,12 +74,6 @@ $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -e myemail@email.com -r 127
 ## How it works
 
 The general idea is if you can get notified as soon as a product becomes in stock, you might have a chance to purchase it before scalpers clear out inventory. This script continually refreshes a set of URLs, looking for the "add to cart" phrase. Once detected, an automated alert is sent, giving you an opportunity to react.
-
-## Known issues
-
-### Support for other retailers
-
-Currently, only B&H, Micro Center, and Newegg have been tested, so YMMV for other retailers. Lots of users requested support for Amazon and Best Buy, but unfortunately, these retailers have web scraping protections built into their websites. I am currently developing a workaround. I am also working on a guide to help users develop their own scraper plugins.
 
 ## FAQ
 
