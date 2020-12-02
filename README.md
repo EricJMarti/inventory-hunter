@@ -43,7 +43,7 @@ If using Discord or Slack, the format of your command will look like this:
 $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
 ```
 
-For example:
+Discord example:
 
 ```
 pi@raspberrypi ~/inventory-hunter
@@ -56,7 +56,7 @@ If using an SMTP relay, the format of your command will look like this:
 $ ./docker_run.bash -c <config_file> -e <email_address> -r <relay_ip_address>
 ```
 
-For example:
+SMTP example:
 
 ```
 pi@raspberrypi ~/inventory-hunter
