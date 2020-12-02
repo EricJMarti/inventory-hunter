@@ -18,14 +18,20 @@ These steps *should* work on any supported Docker platform, but they have been s
 
 1. Clone this repository and build a Docker image using the provided [Dockerfile](Dockerfile):
 ```
-$ git clone https://github.com/EricJMarti/inventory-hunter.git
+pi@raspberrypi ~
+$ git clone https://github.com/EricJMarti/inventory-hunter.
+
+pi@raspberrypi ~
 $ cd inventory-hunter
+
+pi@raspberrypi ~/inventory-hunter
 $ docker build -t inventory-hunter .
 ```
 
 Note: The `docker build` command may take a while to complete. If you experience issues building your Docker image, please try again using this build command:
 
 ```
+pi@raspberrypi ~/inventory-hunter
 $ docker build --build-arg requirements=requirements_lite.txt -t inventory-hunter .
 ```
 
