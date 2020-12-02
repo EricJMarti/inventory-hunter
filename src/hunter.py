@@ -3,11 +3,10 @@ import sched
 import sys
 
 from alerter import EmailAlerter, DiscordAlerter, SlackAlerter
-from scraper import init_scrapers
 
 
 class Engine:
-    def __init__(self, args, config, driver):
+    def __init__(self, args, config, scrapers):
 
         alert_types = {
             "email": EmailAlerter,
@@ -20,8 +19,7 @@ class Engine:
         self.refresh_interval = config.refresh_interval
         self.max_price = config.max_price
         self.scheduler = sched.scheduler()
-        self.scrapers = init_scrapers(driver, config.urls)
-        for s in self.scrapers:
+        for s in scrapers:
             self.schedule(s)
 
     def run(self):
@@ -99,6 +97,6 @@ class Engine:
         self.alerter(subject=result.alert_subject, content=result.alert_content)
 
 
-def hunt(args, config, driver):
-    engine = Engine(args, config, driver)
+def hunt(args, config, scrapers):
+    engine = Engine(args, config, scrapers)
     engine.run()

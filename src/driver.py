@@ -3,6 +3,7 @@ import logging
 import os
 import requests
 
+from abc import ABC, abstractmethod
 from selenium import webdriver
 
 
@@ -12,9 +13,19 @@ class HttpGetResponse:
         self.url = url
 
 
-class SeleniumDriver:
+class Driver(ABC):
     def __init__(self, timeout):
         self.timeout = timeout
+
+    @abstractmethod
+    def get(self, url) -> HttpGetResponse:
+        pass
+
+
+class SeleniumDriver(Driver):
+    def __init__(self, timeout):
+        super().__init__(timeout)
+        self.did_warn = False
 
         self.driver_path = '/usr/bin/chromedriver'
         if not os.path.exists(self.driver_path):
@@ -25,7 +36,11 @@ class SeleniumDriver:
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
 
-    def get(self, url):
+    def get(self, url) -> HttpGetResponse:
+        if not self.did_warn:
+            logging.warning('warning: using selenium webdriver for scraping... this feature is under active development')
+            self.did_warn = True
+
         # headless chromium crashes somewhat regularly...
         # for now, we will start a fresh instance every time
         driver = webdriver.Chrome(self.driver_path, options=self.options)
@@ -37,11 +52,8 @@ class SeleniumDriver:
             driver.quit()
 
 
-class RequestsDriver:
-    def __init__(self, timeout):
-        self.timeout = timeout
-
-    def get(self, url):
+class RequestsDriver(Driver):
+    def get(self, url) -> HttpGetResponse:
         headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36'}
         r = requests.get(url, headers=headers, timeout=self.timeout)
         if not r.ok:
@@ -49,19 +61,11 @@ class RequestsDriver:
         return HttpGetResponse(r.text, r.url)
 
 
-def try_init_selenium_driver(timeout):
-    logging.warning('warning: using selenium webdriver for scraping... this feature is under active development')
-    try:
-        return SeleniumDriver(timeout)
-    except Exception as e:
-        logging.error(f'caught exception during selenium driver init: {e}')
-        logging.warning('falling back to requests module')
-        return RequestsDriver(timeout)
+class DriverRepo:
+    def __init__(self, timeout):
+        self.requests = RequestsDriver(timeout)
+        self.selenium = SeleniumDriver(timeout)
 
 
-def init_driver(config):
-    timeout = config.refresh_interval
-    for url in config.urls:
-        if 'amazon' in url.netloc:
-            return try_init_selenium_driver(timeout)
-    return RequestsDriver(timeout)
+def init_drivers(config):
+    return DriverRepo(config.refresh_interval)

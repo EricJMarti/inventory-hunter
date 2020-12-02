@@ -7,5 +7,5 @@ import scraper.newegg
 from scraper.common import ScraperFactory
 
 
-def init_scrapers(driver, urls: list):
-    return [ScraperFactory.create(driver, url) for url in urls]
+def init_scrapers(config, drivers):
+    return [ScraperFactory.create(drivers, url) for url in config.urls]

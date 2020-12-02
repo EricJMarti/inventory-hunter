@@ -43,6 +43,10 @@ class MicroCenterScraper(Scraper):
         return 'microcenter'
 
     @staticmethod
+    def get_driver_type():
+        return 'requests'
+
+    @staticmethod
     def get_result_type():
         return MicroCenterScrapeResult
 

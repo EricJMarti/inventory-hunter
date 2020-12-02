@@ -13,27 +13,24 @@ logging.debug(f'starting with args: {" ".join(sys.argv)}')
 
 
 from config import parse_config
-from driver import init_driver
+from driver import init_drivers
+from scraper import init_scrapers
 from hunter import hunt
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
 
-
-
     parser.add_argument('-c', '--config', type=argparse.FileType('r'), default='/config.yaml', help='YAML config file')
     parser.add_argument('-a', '--alerter', required=True, help="Alert system to be used", default="email", dest="alerter_type")
-    
+    parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose logging')
+
     parser.add_argument('-e', '--email', nargs='+', help='recipient email address(es)')
     parser.add_argument('-r', '--relay', help='IP address of SMTP relay')
-    parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose logging')
-    
-    
+
     # discord (or any other webhook based alerter) - related arguments
     parser.add_argument("-w", "--webhook", help="A valid HTTP url for a POST request.", dest="webhook_url")
     return parser.parse_args()
-    
 
 
 def main():
@@ -42,8 +39,9 @@ def main():
 
     try:
         config = parse_config(args.config)
-        driver = init_driver(config)
-        hunt(args, config, driver)
+        drivers = init_drivers(config)
+        scrapers = init_scrapers(config, drivers)
+        hunt(args, config, scrapers)
     except Exception:
         logging.exception('caught exception')
         sys.exit(1)

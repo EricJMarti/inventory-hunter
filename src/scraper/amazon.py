@@ -35,6 +35,10 @@ class AmazonScraper(Scraper):
         return 'amazon'
 
     @staticmethod
+    def get_driver_type():
+        return 'selenium'
+
+    @staticmethod
     def get_result_type():
         return AmazonScrapeResult
 
