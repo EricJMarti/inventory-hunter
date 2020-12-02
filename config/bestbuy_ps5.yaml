@@ -1,6 +1,6 @@
 ---
 refresh_interval: 2 # seconds
-max_price: 550
+max_price: 550 # dollars
 urls:
   # Sony PS5
   - https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149
