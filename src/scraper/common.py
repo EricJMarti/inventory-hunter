@@ -38,7 +38,7 @@ class ScrapeResult(ABC):
         if not tag:
             return
 
-        price_str = tag.text.strip()
+        price_str = tag if isinstance(tag, str) else tag.text.strip()
         if not price_str:
             return
 
