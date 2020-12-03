@@ -4,19 +4,29 @@ set -e
 
 usage() {
     [ -n "$1" ] && echo "error: $1"
-    echo "usage: $0 -c CONFIG -e EMAIL -r RELAY"
+    echo
+    echo "usage for discord or slack:"
+    echo "  $0 -a DISCORD_OR_SLACK -w WEBHOOK_URL -c CONFIG"
+    echo
+    echo "usage for email:"
+    echo "  $0 -c CONFIG -e EMAIL -r RELAY"
+    echo
     exit 1
 }
 
 [ $# -eq 0 ] && usage
 
 alerter="email"
-while getopts a:c:e:r:w: arg
+default_image="ericjmarti/inventory-hunter:latest"
+image=$default_image
+
+while getopts a:c:e:i:r:w: arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
         c) config=${OPTARG};;
         e) emails+=(${OPTARG});;
+        i) image=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
     esac
@@ -32,10 +42,8 @@ else
     [ -z "$webhook" ] && usage "missing webhook argument"
 fi
 
-image="inventory-hunter"
-
 retcode=0
-(docker image inspect $image &> /dev/null) || retcode=1
+[ "$image" = "$default_image" ] || (docker image inspect $image &> /dev/null) || retcode=1
 
 if [ $retcode -ne 0 ]; then
     echo "the $image docker image does not exist... please build the image and try again"
