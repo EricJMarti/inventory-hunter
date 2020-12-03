@@ -1,0 +1,12 @@
+---
+refresh_interval: 2 # seconds
+max_price: 750 # dollars
+urls:
+  - https://www.amazon.com/PlayStation-5-Console/dp/B08FC5L3RG
+  - https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149
+  - https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161
+  - https://www.newegg.com/p/N82E16868110291
+  - https://www.newegg.com/p/N82E16868110292
+  - https://www.newegg.com/p/N82E16868110293
+  - https://www.walmart.com/ip/PlayStation-5-Console/363472942
+...
