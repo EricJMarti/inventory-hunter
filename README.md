@@ -1,5 +1,7 @@
 # Inventory Hunter
 
+![Build](https://github.com/EricJMarti/inventory-hunter/workflows/Build/badge.svg) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ericjmarti/inventory-hunter/latest)
+
 This bot helped me snag an RTX 3070... hopefully it will help you get your hands on your next CPU, GPU, or game console.
 
 ## Requirements
@@ -16,23 +18,16 @@ You will also need one of the following:
 
 These steps *should* work on any supported Docker platform, but they have been specifically tested on Raspberry Pi OS with Docker already installed.
 
-1. Clone this repository and build a Docker image using the provided [Dockerfile](Dockerfile):
+1. Clone this repository and pull the latest image from [Docker Hub](https://hub.docker.com/r/ericjmarti/inventory-hunter):
 ```
-pi@raspberrypi ~
-$ git clone https://github.com/EricJMarti/inventory-hunter.
+pi@raspberrypi:~
+$ git clone https://github.com/EricJMarti/inventory-hunter
 
-pi@raspberrypi ~
+pi@raspberrypi:~
 $ cd inventory-hunter
 
-pi@raspberrypi ~/inventory-hunter
-$ docker build -t inventory-hunter .
-```
-
-Note: The `docker build` command may take a while to complete. If you experience issues building your Docker image, please try again using this build command:
-
-```
-pi@raspberrypi ~/inventory-hunter
-$ docker build --build-arg requirements=requirements_lite.txt -t inventory-hunter .
+pi@raspberrypi:~/inventory-hunter
+$ docker pull ericjmarti/inventory-hunter:latest
 ```
 
 2. Create your own configuration file based on one of the provided examples:
@@ -49,12 +44,9 @@ If using Discord or Slack, the format of your command will look like this:
 
 ```
 $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
-```
 
-Discord example:
-
-```
-pi@raspberrypi ~/inventory-hunter
+# Discord example:
+pi@raspberrypi:~/inventory-hunter
 $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -a discord -w https://discord.com/api/webhooks/...
 ```
 
@@ -62,12 +54,9 @@ If using an SMTP relay, the format of your command will look like this:
 
 ```
 $ ./docker_run.bash -c <config_file> -e <email_address> -r <relay_ip_address>
-```
 
-SMTP example:
-
-```
-pi@raspberrypi ~/inventory-hunter
+# SMTP example:
+pi@raspberrypi:~/inventory-hunter
 $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -e myemail@email.com -r 127.0.0.1
 ```
 
