@@ -8,7 +8,7 @@ import sys
 locale.setlocale(locale.LC_ALL, '')
 
 # logging must be configured before the next few imports
-logging.basicConfig(level=logging.DEBUG, format='{levelname:.1s}{asctime} {message}', style='{')
+logging.basicConfig(level=logging.DEBUG, format='{levelname:.1s}{asctime} [{name}] {message}', style='{')
 logging.debug(f'starting with args: {" ".join(sys.argv)}')
 
 
