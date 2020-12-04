@@ -12,6 +12,7 @@ This bot helped me snag an RTX 3070... hopefully it will help you get your hands
 You will also need one of the following:
 - [Discord Webhook URL](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 - [Slack Webhook URL](https://api.slack.com/messaging/webhooks)
+- [Telegram Webhook URL and Chat ID](https://core.telegram.org/bots/api)
 - [SMTP relay to send automated emails](https://medium.com/swlh/setting-up-gmail-and-other-email-on-a-raspberry-pi-6f7e3ad3d0e)
 
 ## Quick Start
