@@ -20,46 +20,66 @@ You will also need one of the following:
 These steps *should* work on any supported Docker platform, but they have been specifically tested on Raspberry Pi OS with Docker already installed.
 
 1. Clone this repository and pull the latest image from [Docker Hub](https://hub.docker.com/r/ericjmarti/inventory-hunter):
-```
-pi@raspberrypi:~
-$ git clone https://github.com/EricJMarti/inventory-hunter
-
-pi@raspberrypi:~
-$ cd inventory-hunter
-
-pi@raspberrypi:~/inventory-hunter
-$ docker pull ericjmarti/inventory-hunter:latest
-```
+    ```
+    pi@raspberrypi:~
+    $ git clone https://github.com/EricJMarti/inventory-hunter
+    
+    pi@raspberrypi:~
+    $ cd inventory-hunter
+    
+    pi@raspberrypi:~/inventory-hunter
+    $ docker pull ericjmarti/inventory-hunter:latest
+    ```
 
 2. Create your own configuration file based on one of the provided examples:
 
-- [Amazon RTX 3080 config](config/amazon_rtx_3080.yaml)
-- [Best Buy RTX 3060 Ti config](config/bestbuy_rtx_3060_ti.yaml)
-- [B&H Photo Video RTX 3070 config](config/bhphoto_rtx_3070.yaml)
-- [Micro Center RTX 3070 config](config/microcenter_rtx_3070.yaml)
-- [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
+    - [Amazon RTX 3080 config](config/amazon_rtx_3080.yaml)
+    - [Best Buy RTX 3060 Ti config](config/bestbuy_rtx_3060_ti.yaml)
+    - [B&H Photo Video RTX 3070 config](config/bhphoto_rtx_3070.yaml)
+    - [Micro Center RTX 3070 config](config/microcenter_rtx_3070.yaml)
+    - [Newegg RTX 3070 config](config/newegg_rtx_3070.yaml)
 
 3. Start the Docker container using the provided `docker_run.bash` script, specifying the required arguments.
 
-If using Discord or Slack, the format of your command will look like this:
+    If using Discord or Slack, the format of your command will look like this:
+    
+    ```
+    $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
+    
+    # Discord example:
+    pi@raspberrypi:~/inventory-hunter
+    $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -a discord -w https://discord.com/api/webhooks/...
+    ```
+    
+    If using an SMTP relay, the format of your command will look like this:
+    
+    ```
+    $ ./docker_run.bash -c <config_file> -e <email_address> -r <relay_ip_address>
+    
+    # SMTP example:
+    pi@raspberrypi:~/inventory-hunter
+    $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -e myemail@email.com -r 127.0.0.1
+    ```
+   
+## Getting New Code
 
-```
-$ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
-
-# Discord example:
-pi@raspberrypi:~/inventory-hunter
-$ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -a discord -w https://discord.com/api/webhooks/...
-```
-
-If using an SMTP relay, the format of your command will look like this:
-
-```
-$ ./docker_run.bash -c <config_file> -e <email_address> -r <relay_ip_address>
-
-# SMTP example:
-pi@raspberrypi:~/inventory-hunter
-$ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -e myemail@email.com -r 127.0.0.1
-```
+1. First identify any running container names related to inventory-hunter
+    ```
+    $ docker ps
+    ```
+2. Stop and remove all containers related to inventory-hunter
+    ```
+   $ docker stop CONTAINER_NAME
+   $ docker rm CONTAINER_NAME
+   ```
+3. Pull repo updates
+    ```
+   $ git pull
+   ```
+4. Rerun the docker_run.bash command to start containers back up with updates.
+    ```
+   $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
+   ```
 
 ## How it works
 
