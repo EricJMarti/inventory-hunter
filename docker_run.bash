@@ -5,8 +5,8 @@ set -e
 usage() {
     [ -n "$1" ] && echo "error: $1"
     echo
-    echo "usage for discord or slack:"
-    echo "  $0 -a DISCORD_OR_SLACK -w WEBHOOK_URL -c CONFIG"
+    echo "usage for discord, slack, or telegram:"
+    echo "  $0 -a DISCORD|SLACK|TELEGRAM -w WEBHOOK_URL [-d TELEGRAM_CHAT_ID] -c CONFIG"
     echo
     echo "usage for email:"
     echo "  $0 -c CONFIG -e EMAIL -r RELAY"
@@ -20,11 +20,12 @@ alerter="email"
 default_image="ericjmarti/inventory-hunter:latest"
 image=$default_image
 
-while getopts a:c:e:i:r:w: arg
+while getopts a:c:d:e:i:r:w: arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
         c) config=${OPTARG};;
+        d) chat_id=${OPTARG};;
         e) emails+=(${OPTARG});;
         i) image=${OPTARG};;
         r) relay=${OPTARG};;
@@ -40,6 +41,9 @@ if [ "$alerter" = "email" ]; then
     [ -z "$relay" ] && usage "missing relay argument"
 else
     [ -z "$webhook" ] && usage "missing webhook argument"
+    if [ "$alerter" = "telegram" ]; then
+        [ -z "$chat_id" ] && usage "missing telegram chat id argument"
+    fi
 fi
 
 retcode=0
@@ -68,6 +72,9 @@ if [ "$alerter" = "email" ]; then
     docker_run_cmd="$docker_run_cmd --email ${emails[@]} --relay $relay"
 else
     docker_run_cmd="$docker_run_cmd --webhook $webhook"
+    if [ "$alerter" = "telegram" ]; then
+        docker_run_cmd="$docker_run_cmd --chat-id $chat_id"
+    fi
 fi
 
 docker_ps_cmd="docker ps -a -f name=$container_name"
