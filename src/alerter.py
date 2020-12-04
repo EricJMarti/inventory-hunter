@@ -97,6 +97,33 @@ class DiscordAlerter(AlerterBase):
                 f"Issue with sending webhook to discord. {traceback.format_exc()}"
             )
 
+class TelegramAlerter(AlerterBase):
+    def __init__(self, args):
+        self._webhook_url = args.webhook_url
+        self._chat_id = args.chat_id
+        super().__init__(args)
+
+    def _notification_function(self, **kwargs):
+        _telegram_webhook_generated = {
+            "chat_id": self._chat_id,
+            "parse_mode": "html",
+            "text": f'<b>{kwargs.get("subject")}</b>\n{kwargs.get("content")}'
+        }
+        try:
+            logging.debug(f"Telegram Webhook URL: {self._webhook_url}")
+            send_request = requests.post(
+                self._webhook_url,
+                json=_telegram_webhook_generated,
+            )
+            if send_request.status_code != 200:
+                logging.error(
+                    f"There was an issue sending to Telegram due to an invalid request: {send_request.status_code} -> {send_request.text}"
+                )
+        except Exception:
+            logging.error(
+                f"Issue with sending webhook to Telegram. {traceback.format_exc()}"
+            )
+
 
 class EmailAlerter(AlerterBase):
     def __init__(self, args):

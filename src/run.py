@@ -30,6 +30,7 @@ def parse_args():
 
     # discord (or any other webhook based alerter) - related arguments
     parser.add_argument("-w", "--webhook", help="A valid HTTP url for a POST request.", dest="webhook_url")
+    parser.add_argument("-i", "--chat-id", help="Telegram ID number for the chat room", dest="chat_id")
     return parser.parse_args()
 
 
