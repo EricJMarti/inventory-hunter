@@ -1,5 +1,3 @@
-import logging
-
 from scraper.common import ScrapeResult, Scraper, ScraperFactory
 
 
@@ -16,7 +14,7 @@ class MicroCenterScrapeResult(ScrapeResult):
             if tag:
                 alert_content += tag.text.strip() + '\n'
             else:
-                logging.warning(f'missing title: {self.url}')
+                self.logger.warning(f'missing title: {self.url}')
 
             # get listed price
             tag = details.find('div', id='options-pricing')
@@ -24,7 +22,7 @@ class MicroCenterScrapeResult(ScrapeResult):
             if price_str:
                 alert_subject = f'In Stock for {price_str}'
             else:
-                logging.warning(f'missing price: {self.url}')
+                self.logger.warning(f'missing price: {self.url}')
 
             # check for add to cart button
             tag = details.select_one('aside#cart-options form')
@@ -33,7 +31,7 @@ class MicroCenterScrapeResult(ScrapeResult):
                 self.alert_content = f'{alert_content.strip()}\n{self.url}'
 
         else:
-            logging.warning(f'missing details div: {self.url}')
+            self.logger.warning(f'missing details div: {self.url}')
 
 
 @ScraperFactory.register
@@ -49,9 +47,3 @@ class MicroCenterScraper(Scraper):
     @staticmethod
     def get_result_type():
         return MicroCenterScrapeResult
-
-    @staticmethod
-    def generate_short_name(url):
-        parts = [i for i in url.path.split('/') if i]
-        if parts:
-            return parts[-1]

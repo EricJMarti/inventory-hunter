@@ -1,5 +1,3 @@
-import logging
-
 from scraper.common import ScrapeResult, Scraper, ScraperFactory
 
 
@@ -13,7 +11,7 @@ class WalmartScrapeResult(ScrapeResult):
         if tag:
             alert_content += tag.text.strip() + '\n'
         else:
-            logging.warning(f'missing title: {self.url}')
+            self.logger.warning(f'missing title: {self.url}')
 
         # get listed price
         tag = self.soup.body.select_one('section.prod-PriceSection div.prod-PriceHero span.price-group')
@@ -21,7 +19,7 @@ class WalmartScrapeResult(ScrapeResult):
         if price_str:
             alert_subject = f'In Stock for {price_str}'
         else:
-            logging.warning(f'missing price: {self.url}')
+            self.logger.warning(f'missing price: {self.url}')
 
         # check for add to cart button
         tag = self.soup.body.select_one('section.prod-ProductCTA.primaryProductCTA-marker button')
@@ -43,9 +41,3 @@ class WalmartScraper(Scraper):
     @staticmethod
     def get_result_type():
         return WalmartScrapeResult
-
-    @staticmethod
-    def generate_short_name(url):
-        parts = [i for i in url.path.split('/') if i]
-        if parts:
-            return parts[-1]

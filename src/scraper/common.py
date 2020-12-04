@@ -1,7 +1,6 @@
 import locale
 import logging
 import pathlib
-import random
 
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
@@ -17,9 +16,10 @@ finally:
 
 
 class ScrapeResult(ABC):
-    def __init__(self, r, last_result):
+    def __init__(self, logger, r, last_result):
         self.alert_subject = None
         self.alert_content = None
+        self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
         self.last_price = last_result.price if last_result is not None else None
@@ -47,7 +47,7 @@ class ScrapeResult(ABC):
             self.price = locale.atof(price_str.replace(currency_symbol, '').strip())
             return price_str if price_str else None
         except Exception as e:
-            logging.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
+            self.logger.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
 
     @abstractmethod
     def parse(self):
@@ -65,18 +65,14 @@ class GenericScrapeResult(ScrapeResult):
 class Scraper(ABC):
     def __init__(self, drivers, url):
         self.driver = getattr(drivers, self.get_driver_type())
+        self.logger = logging.getLogger(url.nickname)
         self.url = url
         self.last_result = None
 
-        self.name = self.generate_short_name(url)
-        if not self.name:
-            random.seed()
-            return f'{self.get_domain()}{random.randrange(100)}'
-
         data_dir = pathlib.Path('data').resolve()
         data_dir.mkdir(exist_ok=True)
-        self.filename = data_dir / f'{self.name}.txt'
-        logging.info(f'scraper initialized for {self.url}')
+        self.filename = data_dir / f'{url.nickname}.txt'
+        self.logger.info(f'scraper initialized for {self.url}')
 
     @staticmethod
     @abstractmethod
@@ -93,25 +89,20 @@ class Scraper(ABC):
     def get_result_type():
         pass
 
-    @staticmethod
-    @abstractmethod
-    def generate_short_name(url):
-        pass
-
     def scrape(self):
         try:
             url = str(self.url)
-            logging.debug(f'{self.name}: starting new scrape')
+            self.logger.debug('starting new scrape')
             r = self.driver.get(url)
             with self.filename.open('w') as f:
                 f.write(r.text)
             result_type = self.get_result_type()
-            this_result = result_type(r, self.last_result)
+            this_result = result_type(self.logger, r, self.last_result)
             self.last_result = this_result
             return this_result
 
         except Exception as e:
-            logging.error(f'{self.name}: caught exception during request: {e}')
+            self.logger.error(f'caught exception during request: {e}')
 
 
 class GenericScraper(Scraper):
@@ -126,12 +117,6 @@ class GenericScraper(Scraper):
     @staticmethod
     def get_result_type():
         return GenericScrapeResult
-
-    @staticmethod
-    def generate_short_name(url):
-        parts = [i for i in url.path.split('/') if i]
-        if parts:
-            return '_'.join(parts)
 
 
 class ScraperFactory:

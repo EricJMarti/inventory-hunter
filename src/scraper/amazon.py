@@ -1,5 +1,3 @@
-import logging
-
 from scraper.common import ScrapeResult, Scraper, ScraperFactory
 
 
@@ -13,7 +11,7 @@ class AmazonScrapeResult(ScrapeResult):
         if tag:
             alert_content += tag.text.strip() + '\n'
         else:
-            logging.warning(f'missing title: {self.url}')
+            self.logger.warning(f'missing title: {self.url}')
 
         # get listed price
         tag = self.soup.body.select_one('div.a-section > span#price_inside_buybox')
@@ -41,9 +39,3 @@ class AmazonScraper(Scraper):
     @staticmethod
     def get_result_type():
         return AmazonScrapeResult
-
-    @staticmethod
-    def generate_short_name(url):
-        parts = [i for i in url.path.split('/') if i]
-        if parts:
-            return parts[min(2, len(parts) - 1)]

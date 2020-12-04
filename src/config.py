@@ -1,9 +1,12 @@
 import urllib
 import yaml
 
+from collections import Counter
+
 
 class URL:
     def __init__(self, url):
+        self.nickname = 'covfefe'
         try:
             result = urllib.parse.urlparse(url)
             self.netloc = result.netloc
@@ -20,7 +23,23 @@ class Config:
     def __init__(self, refresh_interval, max_price, urls):
         self.refresh_interval = refresh_interval
         self.max_price = max_price
-        self.urls = [URL(url) for url in sorted(set(urls))]
+        self.urls = [URL(url) for url in urls]
+
+        # generating nicknames
+        netloc_counter = Counter()
+        for url in self.urls:
+            netloc = url.netloc.lower()
+            if netloc.startswith('www.'):
+                netloc = netloc.replace('www.', '')
+            if netloc.endswith('.com'):
+                netloc = netloc.replace('.com', '')
+            for c in ('a', 'e', 'i', 'o', 'u'):
+                netloc = netloc.replace(c, '')
+            netloc = netloc.replace('.', '_')
+            netloc_counter[netloc] += 1
+            count = netloc_counter[netloc]
+            nickname = f'{netloc}_{count}'
+            url.nickname = nickname
 
 
 def parse_config(f):
@@ -34,4 +53,5 @@ def parse_config(f):
     if 'urls' not in data:
         raise Exception('config missing urls section')
 
-    return Config(refresh_interval, max_price, data['urls'])
+    urls = sorted(set([url for url in data['urls'] if url]))
+    return Config(refresh_interval, max_price, urls)

@@ -37,7 +37,7 @@ class Engine:
         result = s.scrape()
 
         if result is None:
-            logging.error(f'{s.name}: scrape failed')
+            s.logger.error('scrape failed')
         else:
             self.process_scrape_result(s, result)
 
@@ -53,11 +53,11 @@ class Engine:
 
             # if no pricing is available, we'll assume the price hasn't changed
             if current_price is None or last_price is None:
-                logging.info(f'{s.name}: still in stock')
+                s.logger.info('still in stock')
 
             # is the current price the same as the last price? (most likely yes)
             elif current_price == last_price:
-                logging.info(f'{s.name}: still in stock at the same price')
+                s.logger.info('still in stock at the same price')
 
             # has the price gone down?
             elif current_price < last_price:
@@ -65,10 +65,10 @@ class Engine:
                 if self.max_price is None or current_price <= self.max_price:
                     self.send_alert(s, result, f'now in stock at {current_price}!')
                 else:
-                    logging.info(f'{s.name}: now in stock at {current_price}... still too expensive')
+                    s.logger.info(f'now in stock at {current_price}... still too expensive')
 
             else:
-                logging.info(f'{s.name}: now in stock at {current_price}... more expensive than before :(')
+                s.logger.info(f'now in stock at {current_price}... more expensive than before :(')
 
         elif currently_in_stock and not previously_in_stock:
 
@@ -81,20 +81,20 @@ class Engine:
                 self.send_alert(s, result, f'now in stock at {current_price}!')
 
             else:
-                logging.info(f'{s.name}: now in stock at {current_price}... too expensive')
+                s.logger.info(f'now in stock at {current_price}... too expensive')
 
         elif not currently_in_stock and result.has_phrase('are you a human'):
 
-            logging.error(f'{s.name}: got "are you a human" prompt')
+            s.logger.error('got "are you a human" prompt')
             self.alerter('Something went wrong',
                          f'You need to answer this CAPTCHA and restart this script: {result.url}')
             sys.exit(1)
 
         else:
-            logging.info(f'{s.name}: not in stock')
+            s.logger.info('not in stock')
 
     def send_alert(self, s, result, reason):
-        logging.info(f'{s.name}: {reason}')
+        s.logger.info(reason)
         self.alerter(subject=result.alert_subject, content=result.alert_content)
 
 

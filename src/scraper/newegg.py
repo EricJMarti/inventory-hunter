@@ -1,5 +1,3 @@
-import logging
-
 from scraper.common import ScrapeResult, Scraper, ScraperFactory
 
 
@@ -20,7 +18,7 @@ class NeweggScrapeResult(ScrapeResult):
                 alert_content += tag.text.strip() + '\n'
                 is_combo = True
             else:
-                logging.warning(f'missing title: {self.url}')
+                self.logger.warning(f'missing title: {self.url}')
 
         if is_combo:
             buy_box = self.soup.body.find('div', class_='grpPricing')
@@ -32,7 +30,7 @@ class NeweggScrapeResult(ScrapeResult):
                 if price_str:
                     alert_subject = f'In Stock for {price_str}'
                 else:
-                    logging.warning(f'missing combo price: {self.url}')
+                    self.logger.warning(f'missing combo price: {self.url}')
 
                 # check for add to cart button
                 tag = buy_box.select_one('div.grpAction > a.atnPrimary')
@@ -41,10 +39,10 @@ class NeweggScrapeResult(ScrapeResult):
                         self.alert_subject = alert_subject
                         self.alert_content = f'{alert_content.strip()}\n{self.url}'
                 else:
-                    logging.warning(f'missing combo add to cart button: {self.url}')
+                    self.logger.warning(f'missing combo add to cart button: {self.url}')
 
             else:
-                logging.warning(f'missing combo buy box: {self.url}')
+                self.logger.warning(f'missing combo buy box: {self.url}')
 
         else:
             buy_box = self.soup.body.find('div', class_='product-buy-box')
@@ -56,7 +54,7 @@ class NeweggScrapeResult(ScrapeResult):
                 if price_str:
                     alert_subject = f'In Stock for {price_str}'
                 else:
-                    logging.warning(f'missing price: {self.url}')
+                    self.logger.warning(f'missing price: {self.url}')
 
                 # check for add to cart button
                 tag = buy_box.find('div', class_='product-buy')
@@ -65,10 +63,10 @@ class NeweggScrapeResult(ScrapeResult):
                         self.alert_subject = alert_subject
                         self.alert_content = f'{alert_content.strip()}\n{self.url}'
                 else:
-                    logging.warning(f'missing add to cart button: {self.url}')
+                    self.logger.warning(f'missing add to cart button: {self.url}')
 
             else:
-                logging.warning(f'missing buy box: {self.url}')
+                self.logger.warning(f'missing buy box: {self.url}')
 
 
 @ScraperFactory.register
@@ -84,9 +82,3 @@ class NeweggScraper(Scraper):
     @staticmethod
     def get_result_type():
         return NeweggScrapeResult
-
-    @staticmethod
-    def generate_short_name(url):
-        parts = [i for i in url.path.split('/') if i]
-        if parts:
-            return parts[0]
