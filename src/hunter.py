@@ -2,7 +2,7 @@ import logging
 import sched
 import sys
 
-from alerter import EmailAlerter, DiscordAlerter, SlackAlerter
+from alerter import EmailAlerter, DiscordAlerter, SlackAlerter, TelegramAlerter
 
 
 class Engine:
@@ -11,7 +11,8 @@ class Engine:
         alert_types = {
             "email": EmailAlerter,
             "discord": DiscordAlerter,
-            "slack": SlackAlerter
+            "slack": SlackAlerter,
+            "telegram": TelegramAlerter
         }
         self.alerter = alert_types[args.alerter_type](args)
         logging.debug(f"selected alerter: {args.alerter_type} -> {self.alerter}")
