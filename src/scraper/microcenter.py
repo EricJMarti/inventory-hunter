@@ -30,6 +30,12 @@ class MicroCenterScrapeResult(ScrapeResult):
                 self.alert_subject = alert_subject
                 self.alert_content = f'{alert_content.strip()}\n{self.url}'
 
+            # check for in-store inventory
+            tag = details.select_one('div#pnlInventory span.inventoryCnt')
+            if tag and 'in stock' in str(tag).lower():
+                self.alert_subject = alert_subject
+                self.alert_content = f'{alert_content.strip()}\n{self.url}'
+
         else:
             self.logger.warning(f'missing details div: {self.url}')
 
