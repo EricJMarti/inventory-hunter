@@ -1,15 +1,23 @@
 import argparse
 import locale
 import logging
+import pathlib
 import sys
 
 
 # required for price parsing logic
 locale.setlocale(locale.LC_ALL, '')
 
+# get version
+version = 'v0.0.1'
+version_path = pathlib.Path(__file__).resolve().parent / 'version.txt'
+if version_path.is_file():
+    with open(version_path, 'r') as f:
+        version = f.read().strip()
+
 # logging must be configured before the next few imports
 logging.basicConfig(level=logging.DEBUG, format='{levelname:.1s}{asctime} [{name}] {message}', style='{')
-logging.debug(f'starting with args: {" ".join(sys.argv)}')
+logging.debug(f'starting {version} with args: {" ".join(sys.argv)}')
 
 
 from config import parse_config

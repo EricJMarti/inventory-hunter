@@ -10,6 +10,7 @@ WORKDIR /
 ARG requirements=requirements.txt
 COPY $requirements /src/requirements.txt
 RUN pip install -r /src/requirements.txt
+COPY VERSION /src/version.txt
 COPY src /src
 
 ENTRYPOINT ["python", "/src/run.py"]
