@@ -1,6 +1,6 @@
 # Inventory Hunter
 
-![Build](https://github.com/EricJMarti/inventory-hunter/workflows/Build/badge.svg) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ericjmarti/inventory-hunter/latest)
+![Build](https://github.com/EricJMarti/inventory-hunter/workflows/Build/badge.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/ericjmarti/inventory-hunter) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ericjmarti/inventory-hunter/latest)
 
 This bot helped me snag an RTX 3070... hopefully it will help you get your hands on your next CPU, GPU, or game console.
 
