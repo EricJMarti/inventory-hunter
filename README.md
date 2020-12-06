@@ -17,6 +17,8 @@ You will also need one of the following:
 
 ## Quick Start
 
+For instructions specific to Windows, please see this guide instead: [Instructions for Windows](https://github.com/EricJMarti/inventory-hunter/wiki/Instructions-for-Windows)
+
 These steps *should* work on any supported Docker platform, but they have been specifically tested on Raspberry Pi OS with Docker already installed.
 
 1. Clone this repository and pull the latest image from [Docker Hub](https://hub.docker.com/r/ericjmarti/inventory-hunter):
