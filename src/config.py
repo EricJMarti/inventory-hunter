@@ -21,7 +21,7 @@ class URL:
 
 class Config:
     def __init__(self, refresh_interval, max_price, urls):
-        self.refresh_interval = refresh_interval
+        self.refresh_interval = float(refresh_interval)
         self.max_price = max_price
         self.urls = [URL(url) for url in urls]
 
