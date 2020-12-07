@@ -33,6 +33,7 @@ class SeleniumDriver(Driver):
 
         self.options = webdriver.ChromeOptions()
         self.options.headless = True
+        self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
 
