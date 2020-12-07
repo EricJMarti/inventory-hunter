@@ -5,7 +5,27 @@ import requests
 
 from abc import ABC, abstractmethod
 from selenium import webdriver
+import time
 
+
+# Code from https://stackoverflow.com/questions/38518998/selenium-leaves-behind-running-processes
+def quit_driver_and_reap_children(driver):
+    logging.debug('Quitting session: %s' % driver.session_id)
+    driver.quit()
+    try:
+        pid = True
+        while pid:
+            pid = os.waitpid(-1, os.WNOHANG)
+            logging.debug("Reaped child: %s" % str(pid))
+
+            #Wonka's Solution to avoid infinite loop cause pid value -> (0, 0)
+            try:
+                if pid[0] == 0:
+                    pid = False
+            except:
+                pass
+    except ChildProcessError:
+        pass
 
 class HttpGetResponse:
     def __init__(self, text, url):
@@ -43,13 +63,14 @@ class SeleniumDriver(Driver):
 
         # headless chromium crashes somewhat regularly...
         # for now, we will start a fresh instance every time
-        driver = webdriver.Chrome(self.driver_path, options=self.options)
-        try:
-            driver.get(url)
-            return HttpGetResponse(driver.page_source, url)
-        finally:
-            driver.close()
-            driver.quit()
+        with webdriver.Chrome(self.driver_path, options=self.options) as driver:
+            res = None
+            try:
+                driver.get(url)
+                res = HttpGetResponse(driver.page_source, url)
+            finally:
+                quit_driver_and_reap_children(driver)
+        return res
 
 
 class RequestsDriver(Driver):
