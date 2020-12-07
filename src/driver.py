@@ -36,6 +36,7 @@ class SeleniumDriver(Driver):
         self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
+        self.options.add_argument('--user-data-dir=/data/selenium')
 
     def get(self, url) -> HttpGetResponse:
         if not self.did_warn:
