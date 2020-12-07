@@ -6,15 +6,6 @@ from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
 
 
-try:
-    import lxml  # noqa: F401
-    parser = 'lxml'
-except ImportError:
-    parser = 'html.parser'
-finally:
-    logging.debug(f'using parser: {parser}')
-
-
 class ScrapeResult(ABC):
     def __init__(self, logger, r, last_result):
         self.alert_subject = None
@@ -23,7 +14,7 @@ class ScrapeResult(ABC):
         self.previously_in_stock = bool(last_result)
         self.price = None
         self.last_price = last_result.price if last_result is not None else None
-        self.soup = BeautifulSoup(r.text, parser)
+        self.soup = BeautifulSoup(r.text, 'lxml')
         self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
         self.url = r.url
         self.parse()
