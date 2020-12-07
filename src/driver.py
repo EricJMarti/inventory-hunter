@@ -7,6 +7,9 @@ from abc import ABC, abstractmethod
 from selenium import webdriver
 
 
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+
+
 class HttpGetResponse:
     def __init__(self, text, url):
         self.text = text
@@ -36,6 +39,7 @@ class SeleniumDriver(Driver):
         self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
+        self.options.add_argument(f'--user-agent="{user_agent}"')
         self.options.add_argument('--user-data-dir=/data/selenium')
 
     def get(self, url) -> HttpGetResponse:
@@ -52,7 +56,7 @@ class SeleniumDriver(Driver):
 
 class RequestsDriver(Driver):
     def get(self, url) -> HttpGetResponse:
-        headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36'}
+        headers = {'user-agent': user_agent}
         r = requests.get(url, headers=headers, timeout=self.timeout)
         if not r.ok:
             raise Exception(f'got response with status code {r.status_code} for {url}')
