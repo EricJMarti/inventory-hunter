@@ -1,5 +1,4 @@
 import getpass
-import logging
 import os
 import requests
 
@@ -28,8 +27,6 @@ class Driver(ABC):
 class SeleniumDriver(Driver):
     def __init__(self, timeout):
         super().__init__(timeout)
-        self.did_warn = False
-
         self.driver_path = '/usr/bin/chromedriver'
         if not os.path.exists(self.driver_path):
             raise Exception(f'not found: {self.driver_path}')
@@ -43,10 +40,6 @@ class SeleniumDriver(Driver):
         self.options.add_argument('--user-data-dir=/data/selenium')
 
     def get(self, url) -> HttpGetResponse:
-        if not self.did_warn:
-            logging.warning('warning: using selenium webdriver for scraping... this feature is under active development')
-            self.did_warn = True
-
         # headless chromium crashes somewhat regularly...
         # for now, we will start a fresh instance every time
         with webdriver.Chrome(self.driver_path, options=self.options) as driver:
