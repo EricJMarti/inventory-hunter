@@ -1,8 +1,12 @@
 import logging
+import random
 import sched
 import sys
 
 from alerter import EmailAlerter, DiscordAlerter, SlackAlerter, TelegramAlerter
+
+
+random.seed()
 
 
 class Engine:
@@ -27,11 +31,16 @@ class Engine:
         self.scheduler.run(blocking=True)
 
     def schedule(self, s):
+        time_delta = self.refresh_interval
+
+        # semi-random intervals throw off some web scraping defenses
+        time_delta *= random.randint(100, 120) / 100.0
+
         if self.scheduler.queue:
-            t = self.scheduler.queue[-1].time + self.refresh_interval
+            t = self.scheduler.queue[-1].time + time_delta
             self.scheduler.enterabs(t, 1, Engine.tick, (self, s))
         else:
-            self.scheduler.enter(self.refresh_interval, 1, Engine.tick, (self, s))
+            self.scheduler.enter(time_delta, 1, Engine.tick, (self, s))
 
     def tick(self, s):
         result = s.scrape()
