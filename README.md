@@ -6,7 +6,7 @@ This bot helped me snag an RTX 3070... hopefully it will help you get your hands
 
 ## Requirements
 
-- Raspberry Pi (alternatively, you can use an always-on PC)
+- Raspberry Pi 2 or newer (alternatively, you can use an always-on PC or Mac)
 - [Docker](https://www.docker.com/) ([tutorial](https://phoenixnap.com/kb/docker-on-raspberry-pi))
 
 You will also need one of the following:
