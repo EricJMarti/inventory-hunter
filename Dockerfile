@@ -13,4 +13,4 @@ RUN pip install -r /src/requirements.txt
 COPY VERSION /src/version.txt
 COPY src /src
 
-ENTRYPOINT ["python", "/src/run.py"]
+ENTRYPOINT ["bash", "/src/run.bash"]
