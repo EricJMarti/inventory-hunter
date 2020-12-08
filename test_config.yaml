@@ -1,8 +1,8 @@
 ---
 refresh_interval: 2 # seconds
-max_price: 750 # dollars
+max_price: 9999 # dollars
 urls:
-  - https://www.amazon.co.uk/Intel-BX80684I79700K-I7-9700K-3-60GHZ-SKT1151-Noir/dp/B07HHN6KBZ/ref=sr_1_3?dchild=1&keywords=cpu&qid=1607389585&sr=8-3
+  - https://www.amazon.co.uk/all-new-echo-4th-generation-with-premium-sound-smart-home-hub-and-alexa-charcoal/dp/B085G58KWT/ref=sr_1_1?dchild=1&keywords=amazon+alexa&qid=1607440771&sr=8-1
   - https://www.overclockers.co.uk/endgame-gear-xm1-rgb-usb-rgb-optical-esports-performance-gaming-mouse-white-egg-xm1rgb-wht-kb-007-eg.html
   - https://www.box.co.uk/910-005796-Logitech-G203-Lightsync-Gaming-Mouse_2938178.html
   - https://www.currys.co.uk/gbuk/home-appliances/floorcare/vacuum-cleaners/dyson-v11-absolute-cordless-vacuum-cleaner-blue-10204572-pdt.html?intcmp=home~Dyson-V11-Absolute~category-blocks%20four~2~n/a~BF~wk31~n/a
