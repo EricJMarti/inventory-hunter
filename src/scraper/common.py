@@ -1,6 +1,7 @@
 import locale
 import logging
 import pathlib
+import html
 
 # required for price parsing logic
 locale.setlocale(locale.LC_ALL, '')
@@ -33,6 +34,7 @@ class ScrapeResult(ABC):
             return
 
         price_str = tag if isinstance(tag, str) else tag.text.strip()
+        price_str = html.unescape(price_str).strip()
         if not price_str:
             return
 
