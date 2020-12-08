@@ -66,7 +66,7 @@ fi
 
 container_name=$(basename $config .yaml)
 
-docker_run_cmd="docker run -d --name $container_name --network host -v $config:/config.yaml $image --alerter $alerter"
+docker_run_cmd="docker run -d --rm --name $container_name --network host -v $config:/config.yaml $image --alerter $alerter"
 
 if [ "$alerter" = "email" ]; then
     docker_run_cmd="$docker_run_cmd --email ${emails[@]} --relay $relay"
