@@ -48,7 +48,7 @@ class Engine:
         if result is None:
             s.logger.error('scrape failed')
         else:
-            self.process_scrape_result(s, result)
+            self.process_scrape_result(self, s, result)
 
         return self.schedule(s)
 
