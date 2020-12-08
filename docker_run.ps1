@@ -34,7 +34,7 @@ $Config = (Resolve-Path -Path $Config)
 
 $ContainerName = [System.IO.Path]::GetFileNameWithoutExtension($Config)
 
-$DockerRunCmd = "docker run -d --name $ContainerName --network host -v ${Config}:/config.yaml $Image --alerter $Alerter"
+$DockerRunCmd = "docker run -d --rm --name $ContainerName --network host -v ${Config}:/config.yaml $Image --alerter $Alerter"
 
 if ($Alerter -eq "email") {
     $DockerRunCmd = "$DockerRunCmd --email $Email --relay $Relay"
