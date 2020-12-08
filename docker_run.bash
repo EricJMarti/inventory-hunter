@@ -46,13 +46,15 @@ else
     fi
 fi
 
-retcode=0
-[ "$image" = "$default_image" ] || (docker image inspect $image &> /dev/null) || retcode=1
-
-if [ $retcode -ne 0 ]; then
-    echo "the $image docker image does not exist... please build the image and try again"
-    echo "build command: docker build -t $image ."
-    exit 1
+if [ "$image" = "$default_image" ]; then
+    docker pull "$image"
+else
+    result=$( docker images -q $image )
+    if [ -z "$result" ]; then
+        echo "the $image docker image does not exist... please build the image and try again"
+        echo "build command: docker build -t $image ."
+        exit 1
+    fi
 fi
 
 # docker requires absolute paths
