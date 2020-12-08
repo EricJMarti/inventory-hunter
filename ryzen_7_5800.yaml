@@ -1,0 +1,14 @@
+---
+max_price: 450 # dollars/euros/etc
+refresh_interval: 2 # seconds
+urls:
+  - https://www.amazon.co.uk/AMD-Ryzen-5800X-Processor-Cache/dp/B0815XFSGK/ref=pd_ybh_a_5?_encoding=UTF8&psc=1&refRID=AV0RRVTWARNPKYCYJCSF
+  - https://www.currys.co.uk/gbuk/computing-accessories/components-upgrades/processors/amd-ryzen-7-5800x-processor-10216690-pdt.html
+  - https://www.morecomputers.com/a?pid=100-100000063WOF%3E%3EAMD&referer=PCPart
+  - https://www.ebuyer.com/1126987-amd-ryzen-7-5800x-am4-processor-100-100000063wof
+  - https://www.cclonline.com/product/331766/100-100000063WOF/CPU-Processors/AMD-Ryzen-7-5800X-3-8GHz-Octa-Core-Processor-with-8-Cores-16-Threads-105W-TDP-36MB-Cache-4-7GHz-Turbo-No-Cooler/CPU0680/?siteID=8BacdVP0GFs-owgZUX7ZQ2EQpjtDVPAKSQ
+  - https://www.overclockers.co.uk/AMD-Ryzen-7-5800X-Eight-Core-4.7GHz-Socket-AM4-Processor-Retail-CP-3CB-AM.html?campaign=affiliate/tag&utm_source=pcpartpicker&utm_medium=referral&utm_campaign=affiliategateway
+  - https://www.box.co.uk/100-100000063WOF-AMD-Ryzen-7-5800X-(Socket-AM4)-Processor_3213587.html
+  - https://www.novatech.co.uk/products/amd-ryzen-7-5800x-eight-core-processorcpu-without-cooler-/
+  - https://www.newegg.com/global/uk-en/amd-ryzen-7-5800x/p/N82E16819113665?Description=5800x&cm_re=5800x-_-19-113-665-_-Product
+...

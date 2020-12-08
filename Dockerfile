@@ -2,9 +2,9 @@ FROM python:3.9
 RUN apt update
 RUN apt install -y chromium chromium-driver locales locales-all
 
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_GB.UTF-8
+ENV LANG en_GB.UTF-8
+ENV LANGUAGE en_GB.UTF-8
 
 WORKDIR /
 ARG requirements=requirements.txt

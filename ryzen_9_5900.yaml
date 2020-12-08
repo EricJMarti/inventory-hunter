@@ -1,0 +1,14 @@
+---
+max_price: 570 # dollars/euros/etc
+refresh_interval: 2 # seconds
+urls:
+  - https://www.amazon.co.uk/AMD-Ryzen-5900X-Processor-Cache/dp/B08164VTWH/ref=pd_ybh_a_4?_encoding=UTF8&psc=1&refRID=S2XCSRASQ3GYQTPEWEDB
+  - https://www.currys.co.uk/gbuk/computing-accessories/components-upgrades/processors/amd-ryzen-9-5900x-processor-10216689-pdt.html
+  - https://www.ebuyer.com/1126986-amd-ryzen-9-5900x-am4-processor-100-100000061wof?affid=38503&affname=Stock+Informer&awc=2690_1607369356_4d2dc0eb565072a3bffc1c175b17c1be&utm_medium=referral&utm_campaign=Comparison+Engine&utm_source=Megit+Limited&utm_content=0&utm_term=38503
+  - https://www.cclonline.com/product/331767/100-100000061WOF/CPU-Processors/AMD-Ryzen-9-5900X-3-7GHz-Dodeca-Core-Processor-with-12-Cores-24-Threads-105W-TDP-70MB-Cache-4-8GHz-Turbo-No-Cooler/CPU0681/
+  - https://www.overclockers.co.uk/amd-ryzen-9-5900x-twelve-core-4.8ghz-socket-am4-processor-retail-cp-3ca-am.html?campaign=affiliate/tag
+  - https://www.morecomputers.com/a?pid=100-100000061WOF%3E%3EAMD&referer=PCPart
+  - https://www.box.co.uk/100-100000061WOF-AMD-Ryzen-9-5900X-(Socket-AM4)-Processor_3213585.html
+  - https://www.novatech.co.uk/products/amd-ryzen-9-5900x-twelve-core-processorcpu-without-cooler-/100-100000061wof.html?utm_source=affiliatewindow&utm_medium=affiliate&utm_campaign=Cycling%20Builder
+  - https://www.newegg.com/global/uk-en/amd-ryzen-9-5900x/p/N82E16819113664?Description=5900x&cm_re=5900x-_-19-113-664-_-Product&quicklink=true
+...

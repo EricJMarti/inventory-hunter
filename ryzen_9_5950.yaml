@@ -1,0 +1,14 @@
+---
+max_price: 800 # dollars/euros/etc
+refresh_interval: 2 # seconds
+urls:
+  - https://www.currys.co.uk/gbuk/computing-accessories/components-upgrades/processors/amd-ryzen-9-5950x-processor-10216688-pdt.html?awc=1599_1607369649_278ffe3caa253930176c2a147b95a8dc&srcid=369&xtor=AL-1&cmpid=aff~Stock%20Informer~Comparison%20Engine~38503~Megit+Limited
+  - https://www.amazon.co.uk/AMD-Ryzen-5950X-Processor-Cache/dp/B0815Y8J9N/ref=sr_1_3?dchild=1&keywords=ryzen+9+5900x&qid=1607391068&quartzVehicle=93-1829&replacementKeywords=ryzen+5900x&sr=8-3
+  - https://www.overclockers.co.uk/amd-ryzen-9-5950x-sixteen-core-4.9ghz-socket-am4-processor-retail-cp-3c9-am.html?campaign=affiliate/tag
+  - https://www.morecomputers.com/a?pid=100-100000059WOF%3E%3EAMD&referer=PCPart
+  - https://www.box.co.uk/100-100000059WOF-AMD-Ryzen-9-5950X-(Socket-AM4)-Processor_3213583.html?wgu=13045_206719_16073698413748_975b9b438d&wgexpiry=1615145841&utm_source=webgains_206719&utm_medium=webgains&utm_campaign=affiliate
+  - https://www.cclonline.com/product/331768/100-100000059WOF/CPU-Processors/AMD-Ryzen-9-5950X-3-4GHz-Hexadeca-Core-Processor-with-16-Cores-32-Threads-105W-TDP-72MB-Cache-4-9GHz-Turbo-No-Cooler/CPU0682/?siteID=8BacdVP0GFs-vDEfFZgWCTbKlkGZfSmBZg
+  - https://www.novatech.co.uk/products/amd-ryzen-9-5950x-sixteen-core-processorcpu-without-cooler-/100-100000059wof.html?utm_source=affiliatewindow&utm_medium=affiliate&utm_campaign=Cycling%20Builder
+  - https://www.newegg.com/global/uk-en/amd-ryzen-9-5950x/p/N82E16819113663?Description=5950x&cm_re=5950x-_-19-113-663-_-Product
+  - https://www.ebuyer.com/1126985-amd-ryzen-9-5950x-am4-processor-100-100000059wof
+...
