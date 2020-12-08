@@ -1,12 +1,8 @@
 import argparse
-import locale
 import logging
 import pathlib
 import sys
 
-
-# required for price parsing logic
-locale.setlocale(locale.LC_ALL, '')
 
 # get version
 version = 'v0.0.1'
