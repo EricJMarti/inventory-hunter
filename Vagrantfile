@@ -15,6 +15,6 @@ Vagrant.configure("2") do |config|
       v.cpus = 2
     end
 
-    hunter.vm.provision "shell", path: "linux-ubuntu-setup.sh", args: "vagrant"
+    hunter.vm.provision "shell", path: "linux_ubuntu_setup.bash", args: "vagrant"
   end
 end
