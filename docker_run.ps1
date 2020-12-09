@@ -21,9 +21,11 @@ if ($Alerter -eq "email") {
     }
 }
 
-if ($Image -ne "ericjmarti/inventory-hunter:latest") {
-    docker image inspect $Image | Out-Null
-    if ($LASTEXITCODE -ne 0) {
+if ($Image -eq "ericjmarti/inventory-hunter:latest") {
+    docker pull $Image
+} else {
+    $Result = docker images -q $Image
+    if ([String]::IsNullOrEmpty($Result)) {
         Write-Host "the $Image docker image does not exist... please build the image and try again"
         Write-Host "build command: docker build -t $Image ."
         Exit 1
