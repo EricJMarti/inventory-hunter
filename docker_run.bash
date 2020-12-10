@@ -20,7 +20,7 @@ alerter="email"
 default_image="ericjmarti/inventory-hunter:latest"
 image=$default_image
 
-while getopts a:c:d:e:i:r:w: arg
+while getopts a:c:d:e:i:q:r:w: arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
@@ -28,6 +28,7 @@ do
         d) chat_id=${OPTARG};;
         e) emails+=(${OPTARG});;
         i) image=${OPTARG};;
+        q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
     esac
@@ -36,7 +37,9 @@ done
 [ -z "$config" ] && usage "missing config argument"
 [ ! -f "$config" ] && usage "$config does not exist or is not a regular file"
 
-if [ "$alerter" = "email" ]; then
+if [ ! -z "$alerter_config" ]; then
+    [ ! -f "$alerter_config" ] && usage "$alerter_config does not exist or is not a regular file"
+elif [ "$alerter" = "email" ]; then
     [ -z "$emails" ] && usage "missing email argument"
     [ -z "$relay" ] && usage "missing relay argument"
 else
@@ -62,15 +65,24 @@ if [ "$(uname)" = "Darwin" ]; then
     if [[ ! "$config" == /* ]]; then
         config="$(pwd -P)/${config#./}"
     fi
+    if [ ! -z "$alerter_config" ] && [[ ! "$alerter_config" == /* ]]; then
+        alerter_config="$(pwd -P)/${alerter_config#./}"
+    fi
 else
     config=$(readlink -f $config)
+    [ ! -z "$alerter_conig" ] && alerter_config=$(readlink -f $alerter_config)
 fi
 
 container_name=$(basename $config .yaml)
 
-docker_run_cmd="docker run -d --rm --name $container_name --network host -v $config:/config.yaml $image --alerter $alerter"
+volumes="-v $config:/config.yaml"
+[ ! -z "$alerter_config" ] && volumes="$volumes -v $alerter_config:/alerters.yaml"
 
-if [ "$alerter" = "email" ]; then
+docker_run_cmd="docker run -d --rm --name $container_name --network host $volumes $image --alerter $alerter"
+
+if [ ! -z "$alerter_config" ]; then
+    docker_run_cmd="$docker_run_cmd --alerter-config /alerters.yaml"
+elif [ "$alerter" = "email" ]; then
     docker_run_cmd="$docker_run_cmd --email ${emails[@]} --relay $relay"
 else
     docker_run_cmd="$docker_run_cmd --webhook $webhook"
