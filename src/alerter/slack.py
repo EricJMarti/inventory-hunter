@@ -7,9 +7,9 @@ from alerter.common import Alerter, AlerterFactory
 
 @AlerterFactory.register
 class SlackAlerter(Alerter):
-    def __init__(self, args):
-        self.webhook_url = args.webhook_url
-        super().__init__(args)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.webhook_url = kwargs.get('webhook_url')
 
     @classmethod
     def from_args(cls, args):
