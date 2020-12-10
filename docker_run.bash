@@ -70,7 +70,9 @@ if [ "$(uname)" = "Darwin" ]; then
     fi
 else
     config=$(readlink -f $config)
-    [ ! -z "$alerter_conig" ] && alerter_config=$(readlink -f $alerter_config)
+    if [ ! -z "$alerter_config" ]; then
+        alerter_config=$(readlink -f $alerter_config)
+    fi
 fi
 
 container_name=$(basename $config .yaml)
