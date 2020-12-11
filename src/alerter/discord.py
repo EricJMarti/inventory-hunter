@@ -29,10 +29,10 @@ class DiscordAlerter(Alerter):
         _discord_embed_generated = {
             "content": None,
             "embeds": [
-                {"title": "Alert", "description": kwargs.get("content"), "color": 5832569}
+                {"title": kwargs.get("subject"), "description": kwargs.get("content"), "color": 5832569}
             ],
             "username": "Inventory Hunter",
-            "avatar_url": "https://i.imgur.com/X1o5j0N.jpeg",
+            "avatar_url": "https://styles.redditmedia.com/t5_2th52/styles/communityIcon_4411rfa4elr41.png?width=256&s=bba3f4384cbcb8590f768f4446d98f7b2017beb0",
         }
         try:
             logging.debug(f"Discord Webhook URL: {self.webhook_url}")
