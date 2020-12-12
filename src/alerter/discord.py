@@ -10,6 +10,9 @@ class DiscordAlerter(Alerter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.webhook_url = kwargs.get('webhook_url')
+        self.mentions = kwargs.get('mentions', None)
+        if self.mentions:
+            self.mentions = ' '.join([f'<@{m}>' for m in self.mentions])
 
     @classmethod
     def from_args(cls, args):
@@ -19,20 +22,24 @@ class DiscordAlerter(Alerter):
     @classmethod
     def from_config(cls, config):
         webhook_url = config['webhook_url']
-        return cls(webhook_url=webhook_url)
+        mentions = config['mentions'] if 'mentions' in config else None
+        return cls(webhook_url=webhook_url, mentions=mentions)
 
     @staticmethod
     def get_alerter_type():
         return 'discord'
 
     def __call__(self, **kwargs):
+        content = kwargs.get('content')
+        if self.mentions:
+            content = f'{self.mentions}\n{content}'
         _discord_embed_generated = {
             "content": None,
             "embeds": [
-                {"title": "Alert", "description": kwargs.get("content"), "color": 5832569}
+                {"title": kwargs.get("subject"), "description": content, "color": 5832569}
             ],
             "username": "Inventory Hunter",
-            "avatar_url": "https://i.imgur.com/X1o5j0N.jpeg",
+            "avatar_url": "https://styles.redditmedia.com/t5_2th52/styles/communityIcon_4411rfa4elr41.png?width=256&s=bba3f4384cbcb8590f768f4446d98f7b2017beb0",
         }
         try:
             logging.debug(f"Discord Webhook URL: {self.webhook_url}")
