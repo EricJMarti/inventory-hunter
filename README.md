@@ -108,6 +108,7 @@ If you are interested in configuring multiple alerters or would like to keep you
           - myemail@email.com
           - myfriendsemail@email.com
         relay: 127.0.0.1
+        password: XXXXXXXXXX   # optional
     ...
     ```
 
