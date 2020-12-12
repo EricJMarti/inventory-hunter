@@ -4,6 +4,7 @@ import scraper.bhphotovideo
 import scraper.microcenter
 import scraper.newegg
 import scraper.walmart
+import scraper.samsclub
 
 from scraper.common import ScraperFactory
 
