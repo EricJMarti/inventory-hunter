@@ -36,7 +36,7 @@ class DiscordAlerter(Alerter):
         _discord_embed_generated = {
             "content": mention or None,
             "embeds": [
-                {"title": kwargs.get("subject"), "description": content, "color": 5832569, "footer": {"text":"Did we help? We offer this service for free but we appreciate any donations no matter how small to help us cover our hosting expenses. https://PayPal.me/mrizk21", "icon_url":"https://cdn.discordapp.com/emojis/610642121455566860.png"}}
+                {"title": kwargs.get("subject"), "description": content, "color": 5832569}
             ],
             "username": "StockRadar - ALERT",
             "avatar_url": "https://i.imgur.com/RF6DrjG.png",
