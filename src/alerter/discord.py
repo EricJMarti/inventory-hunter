@@ -32,9 +32,9 @@ class DiscordAlerter(Alerter):
     def __call__(self, **kwargs):
         content = kwargs.get('content')
         if self.mentions:
-            content = f'{self.mentions}\n{content}'
+            mention = f'{self.mentions}'
         _discord_embed_generated = {
-            "content": None,
+            "content": mention or None,
             "embeds": [
                 {"title": kwargs.get("subject"), "description": content, "color": 5832569}
             ],
