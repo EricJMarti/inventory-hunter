@@ -83,6 +83,24 @@ These steps *should* work on any supported Docker platform, but they have been s
     $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
     ```
 
+## Configurating Alerter 
+
+1. First make a file and name it alerters.yaml in /config
+2. Example of alerters.yaml below
+```
+---
+alerters:
+  discord:
+    webhook_url: https://discord.com/api/webhooks/XXXXXXXXXXXX...
+    mentions:
+        - XXXXXXXXXXXXXXX
+        - XXXXXXXXXXXXXXX
+  telegram:
+    webhook_url: https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXX/sendMessage
+    chat_id: XXXXXXXX
+...
+```
+
 ## How it works
 
 The general idea is if you can get notified as soon as a product becomes in stock, you might have a chance to purchase it before scalpers clear out inventory. This script continually refreshes a set of URLs, looking for the "add to cart" phrase. Once detected, an automated alert is sent, giving you an opportunity to react.
