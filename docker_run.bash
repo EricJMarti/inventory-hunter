@@ -19,8 +19,9 @@ usage() {
 alerter="email"
 default_image="ericjmarti/inventory-hunter:latest"
 image=$default_image
+should_rm=1
 
-while getopts a:c:d:e:i:q:r:w: arg
+while getopts a:c:d:e:i:q:r:w:z arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
@@ -31,6 +32,7 @@ do
         q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
+        z) should_rm=0;;
     esac
 done
 
@@ -80,7 +82,10 @@ container_name=$(basename $config .yaml)
 volumes="-v $config:/config.yaml"
 [ ! -z "$alerter_config" ] && volumes="$volumes -v $alerter_config:/alerters.yaml"
 
-docker_run_cmd="docker run -d --rm --name $container_name --network host $volumes $image --alerter $alerter"
+rm_flag=""
+[ $should_rm -ne 0 ] && rm_flag="--rm"
+
+docker_run_cmd="docker run -d $rm_flag --name $container_name --network host $volumes $image --alerter $alerter"
 
 if [ ! -z "$alerter_config" ]; then
     docker_run_cmd="$docker_run_cmd --alerter-config /alerters.yaml"
