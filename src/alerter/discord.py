@@ -12,7 +12,7 @@ class DiscordAlerter(Alerter):
         self.webhook_url = kwargs.get('webhook_url')
         self.mentions = kwargs.get('mentions', None)
         if self.mentions:
-            self.mentions = ' '.join([f'<@{m}>' for m in self.mentions])
+            self.mentions = ' '.join([f'<@&{m}>' for m in self.mentions])
 
     @classmethod
     def from_args(cls, args):
@@ -32,14 +32,14 @@ class DiscordAlerter(Alerter):
     def __call__(self, **kwargs):
         content = kwargs.get('content')
         if self.mentions:
-            content = f'{self.mentions}\n{content}'
+            mention = f'{self.mentions}'
         _discord_embed_generated = {
-            "content": None,
+            "content": mention or None,
             "embeds": [
-                {"title": kwargs.get("subject"), "description": content, "color": 5832569}
+                {"title": kwargs.get("subject"), "description": content, "color": 5832569, "footer": {"text":"Did we help? We offer this service for free but we appreciate any donations no matter how small to help us cover our hosting expenses. https://PayPal.me/mrizk21", "icon_url":"https://cdn.discordapp.com/emojis/610642121455566860.png"}}
             ],
-            "username": "Inventory Hunter",
-            "avatar_url": "https://styles.redditmedia.com/t5_2th52/styles/communityIcon_4411rfa4elr41.png?width=256&s=bba3f4384cbcb8590f768f4446d98f7b2017beb0",
+            "username": "StockRadar - ALERT",
+            "avatar_url": "https://i.imgur.com/RF6DrjG.png",
         }
         try:
             logging.debug(f"Discord Webhook URL: {self.webhook_url}")
