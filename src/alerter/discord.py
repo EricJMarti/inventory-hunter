@@ -12,7 +12,7 @@ class DiscordAlerter(Alerter):
         self.webhook_url = kwargs.get('webhook_url')
         self.mentions = kwargs.get('mentions', None)
         if self.mentions:
-            self.mentions = ' '.join([f'<@&{m}>' for m in self.mentions])
+            self.mentions = ' '.join([f'<@{m}>' for m in self.mentions])
 
     @classmethod
     def from_args(cls, args):
