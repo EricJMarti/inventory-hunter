@@ -83,23 +83,40 @@ These steps *should* work on any supported Docker platform, but they have been s
     $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
     ```
 
-## Configurating Alerter 
+## Configuring Alerters
 
-1. First make a file and name it alerters.yaml in /config
-2. Example of alerters.yaml below
-```
----
-alerters:
-  discord:
-    webhook_url: https://discord.com/api/webhooks/XXXXXXXXXXXX...
-    mentions:
-        - XXXXXXXXXXXXXXX
-        - XXXXXXXXXXXXXXX
-  telegram:
-    webhook_url: https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXX/sendMessage
-    chat_id: XXXXXXXX
-...
-```
+If you are interested in configuring multiple alerters or would like to keep your alerter settings saved in a file, you can configure inventory-hunter's alerting mechanism using a config file similar to the existing scraper configs.
+
+1. Create a file called alerters.yaml in the config directory.
+
+2. Configure the alerters you would like to use based on this example:
+
+    ```
+    ---
+    alerters:
+      discord:
+        webhook_url: https://discord.com/api/webhooks/XXXXXXXXXXXX...
+        mentions:
+          - XXXXXXXXXXXXXXX
+          - XXXXXXXXXXXXXXX
+      telegram:
+        webhook_url: https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXX/sendMessage
+        chat_id: XXXXXXXX
+      email:
+        sender: myemail@email.com
+        recipients:
+          - myemail@email.com
+          - myfriendsemail@email.com
+        relay: 127.0.0.1
+    ...
+    ```
+
+3. Add this config file to your run command:
+
+    ```
+    pi@raspberrypi:~/inventory-hunter
+    $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -q ./config/alerters.yaml
+    ```
 
 ## How it works
 
