@@ -1,5 +1,6 @@
 param (
     [String] $Alerter = "email",
+    [String] $AlerterConfig = "",
     [String] $Config = "",
     [String] $ChatId = "",
     [String] $Email = "",
@@ -11,13 +12,15 @@ param (
 if (-Not $Config) { Throw "missing config argument" }
 if (-Not (Test-Path $Config -PathType Leaf)) { Throw "$Config does not exist or is not a regular file" }
 
-if ($Alerter -eq "email") {
-    if (-Not $email) { throw "missing email argument" }
-    if (-Not $relay) { throw "missing relay argument" }
+if ($AlerterConfig) {
+    if (-Not (Test-Path $AlerterConfig -PathType Leaf)) { Throw "$AlerterConfig does not exist or is not a regular file" }
+} elseif ($Alerter -eq "email") {
+    if (-Not $email) { Throw "missing email argument" }
+    if (-Not $relay) { Throw "missing relay argument" }
 } else {
-    if (-Not $webhook) { throw "missing webhook argument" }
+    if (-Not $webhook) { Throw "missing webhook argument" }
     if ($Alerter -eq "telegram") {
-        if (-Not $chatid) { throw "missing telegram chat id argument" }
+        if (-Not $chatid) { Throw "missing telegram chat id argument" }
     }
 }
 
@@ -33,12 +36,24 @@ if ($Image -eq "ericjmarti/inventory-hunter:latest") {
 }
 
 $Config = (Resolve-Path -Path $Config)
+if ($AlerterConfig) { $AlerterConfig = (Resolve-Path -Path $AlerterConfig) }
+
+$ScriptDir = Split-Path $MyInvocation.MyCommand.Path
+$LogDir = "${ScriptDir}\log"
+New-Item $LogDir -ItemType Directory -ea 0 | Out-Null
 
 $ContainerName = [System.IO.Path]::GetFileNameWithoutExtension($Config)
+$LogFile = "${LogDir}\${ContainerName}.txt"
+New-Item $LogFile -ItemType File -ea 0 | Out-Null
 
-$DockerRunCmd = "docker run -d --rm --name $ContainerName --network host -v ${Config}:/config.yaml $Image --alerter $Alerter"
+$Volumes = "-v ${LogFile}:/log.txt -v ${Config}:/config.yaml"
+if ($AlerterConfig) { $Volumes = "$Volumes -v ${AlerterConfig}:/alerters.yaml" }
 
-if ($Alerter -eq "email") {
+$DockerRunCmd = "docker run -d --rm --name $ContainerName --network host $Volumes $Image --alerter $Alerter"
+
+if ($AlerterConfig) {
+    $DockerRunCmd = "$DockerRunCmd --alerter-config /alerters.yaml"
+} elseif ($Alerter -eq "email") {
     $DockerRunCmd = "$DockerRunCmd --email $Email --relay $Relay"
 } else {
     $DockerRunCmd = "$DockerRunCmd --webhook $Webhook"
