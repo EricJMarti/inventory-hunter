@@ -65,7 +65,7 @@ class Scraper(ABC):
 
         data_dir = pathlib.Path('data').resolve()
         data_dir.mkdir(exist_ok=True)
-        self.filename = data_dir / f'{url.nickname}.txt'
+        self.filename = data_dir / f'{url.nickname}.html'
         self.logger.info(f'scraper initialized for {self.url}')
 
     @staticmethod
