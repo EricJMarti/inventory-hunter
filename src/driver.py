@@ -46,7 +46,7 @@ class SeleniumDriver(Driver):
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
         self.options.add_argument(f'--user-agent="{user_agent}"')
-        self.options.add_argument('--user-data-dir=/data/selenium')
+        self.options.add_argument('--user-data-dir=/selenium')
 
     def get(self, url) -> HttpGetResponse:
         # headless chromium crashes somewhat regularly...
