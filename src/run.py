@@ -12,7 +12,8 @@ if version_path.is_file():
         version = f.read().strip()
 
 # logging must be configured before the next few imports
-logging.basicConfig(level=logging.DEBUG, format='{levelname:.1s}{asctime} [{name}] {message}', style='{')
+log_format = '{levelname:.1s}{asctime} [{name}] {message}'
+logging.basicConfig(level=logging.DEBUG, format=log_format, style='{')
 logging.debug(f'starting {version} with args: {" ".join(sys.argv)}')
 
 
@@ -29,6 +30,7 @@ def parse_args():
     parser.add_argument('-c', '--config', type=argparse.FileType('r'), default='/config.yaml', help='YAML config file for web scrapers')
     parser.add_argument('-a', '--alerter', required=True, help="Alert system to be used", default="email", dest="alerter_type")
     parser.add_argument('-q', '--alerter-config', type=argparse.FileType('r'), help='YAML config file for alerters (required if using multiple)')
+    parser.add_argument('-l', '--log', default='/log.txt', help='log file')
     parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose logging')
 
     parser.add_argument('-e', '--email', nargs='+', help='recipient email address(es)')
@@ -43,6 +45,11 @@ def parse_args():
 
 def main():
     args = parse_args()
+    if args.log:
+        logger = logging.getLogger()
+        handler = logging.FileHandler(args.log)
+        handler.setFormatter(logging.Formatter(log_format, style='{'))
+        logger.addHandler(handler)
     logging.getLogger().setLevel(logging.DEBUG if args.verbose else logging.INFO)
 
     try:
