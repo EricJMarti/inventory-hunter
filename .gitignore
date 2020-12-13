@@ -1,6 +1,8 @@
 *.bak
 *~
+.DS_Store
 .idea/
 .vagrant/
 __pycache__
+data/
 log/
