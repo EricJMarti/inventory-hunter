@@ -1,9 +1,6 @@
 import logging
 import pathlib
-import sys
 import unittest
-
-sys.path.append('/src')
 
 from driver import HttpGetResponse
 from scraper.newegg import NeweggScrapeResult as ScrapeResult
