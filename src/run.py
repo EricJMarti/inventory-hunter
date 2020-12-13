@@ -4,26 +4,6 @@ import pathlib
 import sys
 
 
-# get version
-version = 'v0.0.1'
-version_path = pathlib.Path(__file__).resolve().parent / 'version.txt'
-if version_path.is_file():
-    with open(version_path, 'r') as f:
-        version = f.read().strip()
-
-# logging must be configured before the next few imports
-log_format = '{levelname:.1s}{asctime} [{name}] {message}'
-logging.basicConfig(level=logging.DEBUG, format=log_format, style='{')
-logging.debug(f'starting {version} with args: {" ".join(sys.argv)}')
-
-
-from alerter import init_alerters
-from config import parse_config
-from driver import init_drivers
-from scraper import init_scrapers
-from hunter import hunt
-
-
 def parse_args():
     parser = argparse.ArgumentParser()
 
@@ -43,15 +23,35 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
-    args = parse_args()
-    if args.log:
-        logger = logging.getLogger()
-        handler = logging.FileHandler(args.log)
-        handler.setFormatter(logging.Formatter(log_format, style='{'))
-        logger.addHandler(handler)
-    logging.getLogger().setLevel(logging.DEBUG if args.verbose else logging.INFO)
+# get version
+version = 'v0.0.1'
+version_path = pathlib.Path(__file__).resolve().parent / 'version.txt'
+if version_path.is_file():
+    with open(version_path, 'r') as f:
+        version = f.read().strip()
 
+
+# logging must be configured before the next few imports
+args = parse_args()
+log_format = '{levelname:.1s}{asctime} [{name}] {message}'
+log_level = logging.DEBUG if args.verbose else logging.INFO
+logging.basicConfig(level=log_level, format=log_format, style='{')
+if args.log:
+    logger = logging.getLogger()
+    handler = logging.FileHandler(args.log)
+    handler.setFormatter(logging.Formatter(log_format, style='{'))
+    logger.addHandler(handler)
+logging.info(f'starting {version} with args: {" ".join(sys.argv)}')
+
+
+from alerter import init_alerters
+from config import parse_config
+from driver import init_drivers
+from scraper import init_scrapers
+from hunter import hunt
+
+
+def main():
     try:
         alerters = init_alerters(args)
         config = parse_config(args.config)
