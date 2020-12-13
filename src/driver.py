@@ -27,9 +27,18 @@ class Driver(ABC):
 class SeleniumDriver(Driver):
     def __init__(self, timeout):
         super().__init__(timeout)
-        self.driver_path = '/usr/bin/chromedriver'
-        if not os.path.exists(self.driver_path):
-            raise Exception(f'not found: {self.driver_path}')
+        driver_paths = [
+            '/usr/bin/chromedriver',
+            '/usr/bin/local/chromedriver',
+        ]
+        self.driver_path = None
+        for driver_path in driver_paths:
+            if os.path.exists(driver_path):
+                self.driver_path = driver_path
+                break
+
+        if not self.driver_path:
+            raise Exception('Selenium Chrome driver not found at ' + ' or '.join(driver_paths))
 
         self.options = webdriver.ChromeOptions()
         self.options.headless = True
@@ -37,7 +46,7 @@ class SeleniumDriver(Driver):
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
         self.options.add_argument(f'--user-agent="{user_agent}"')
-        self.options.add_argument('--user-data-dir=/data/selenium')
+        self.options.add_argument('--user-data-dir=/selenium')
 
     def get(self, url) -> HttpGetResponse:
         # headless chromium crashes somewhat regularly...

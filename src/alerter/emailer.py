@@ -14,6 +14,7 @@ class EmailAlerter(Alerter):
         self.sender = kwargs.get('sender')
         self.recipients = kwargs.get('recipients')
         self.relay = kwargs.get('relay')
+        self.password = kwargs.get('password', None)
 
     @classmethod
     def from_args(cls, args):
@@ -27,7 +28,8 @@ class EmailAlerter(Alerter):
         sender = config['sender']
         recipients = config['recipients']
         relay = config['relay']
-        return cls(sender=sender, recipients=recipients, relay=relay)
+        password = config.get('password', None)
+        return cls(sender=sender, recipients=recipients, relay=relay, password=password)
 
     @staticmethod
     def get_alerter_type():
@@ -47,4 +49,6 @@ class EmailAlerter(Alerter):
         msg["To"] = ", ".join(self.recipients)
         with smtplib.SMTP(self.relay) as s:
             logging.debug(f"sending email: subject: {set_subject}")
+            if self.password:
+                s.login(self.sender, self.password)
             s.send_message(msg)
