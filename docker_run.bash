@@ -80,10 +80,12 @@ log_dir="$script_dir/log"
 mkdir -p $log_dir
 
 container_name=$(basename $config .yaml)
+data_dir="$script_dir/data/$container_name"
 log_file="$log_dir/$container_name.txt"
+mkdir -p $data_dir
 touch $log_file
 
-volumes="-v $log_file:/log.txt -v $config:/config.yaml"
+volumes="-v $data_dir:/data -v $log_file:/log.txt -v $config:/config.yaml"
 [ ! -z "$alerter_config" ] && volumes="$volumes -v $alerter_config:/alerters.yaml"
 
 docker_run_cmd="docker run -d --rm --name $container_name --network host $volumes $image --alerter $alerter"

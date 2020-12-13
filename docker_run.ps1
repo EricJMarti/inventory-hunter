@@ -43,10 +43,12 @@ $LogDir = "${ScriptDir}\log"
 New-Item $LogDir -ItemType Directory -ea 0 | Out-Null
 
 $ContainerName = [System.IO.Path]::GetFileNameWithoutExtension($Config)
+$DataDir = "${ScriptDir}\data\${ContainerName}"
 $LogFile = "${LogDir}\${ContainerName}.txt"
+New-Item $DataDir -ItemType Directory -ea 0 | Out-Null
 New-Item $LogFile -ItemType File -ea 0 | Out-Null
 
-$Volumes = "-v ${LogFile}:/log.txt -v ${Config}:/config.yaml"
+$Volumes = "-v ${DataDir}:/data -v ${LogFile}:/log.txt -v ${Config}:/config.yaml"
 if ($AlerterConfig) { $Volumes = "$Volumes -v ${AlerterConfig}:/alerters.yaml" }
 
 $DockerRunCmd = "docker run -d --rm --name $ContainerName --network host $Volumes $Image --alerter $Alerter"
