@@ -10,7 +10,7 @@ class DiscordAlerter(Alerter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.webhook_url = kwargs.get('webhook_url')
-        self.mentions = kwargs.get('mentions', None)
+        self.mentions = kwargs.get('mentions', '')
         if self.mentions:
             self.mentions = ' '.join([f'<@{m}>' for m in self.mentions])
 
@@ -22,7 +22,7 @@ class DiscordAlerter(Alerter):
     @classmethod
     def from_config(cls, config):
         webhook_url = config['webhook_url']
-        mentions = config['mentions'] if 'mentions' in config else None
+        mentions = config['mentions'] if 'mentions' in config else ''
         return cls(webhook_url=webhook_url, mentions=mentions)
 
     @staticmethod
@@ -31,10 +31,8 @@ class DiscordAlerter(Alerter):
 
     def __call__(self, **kwargs):
         content = kwargs.get('content')
-        if self.mentions:
-            mention = f'{self.mentions}'
         _discord_embed_generated = {
-            "content": mention or None,
+            "content": self.mentions,
             "embeds": [
                 {"title": kwargs.get("subject"), "description": content, "color": 5832569}
             ],
