@@ -1,5 +1,6 @@
 *.bak
 *~
 .idea/
-__pycache__
 .vagrant/
+__pycache__
+log/
