@@ -1,12 +1,16 @@
 import getpass
+import logging
 import os
+import pathlib
 import requests
+import shutil
+import subprocess
 
 from abc import ABC, abstractmethod
 from selenium import webdriver
 
 
-user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
 
 
 class HttpGetResponse:
@@ -16,8 +20,9 @@ class HttpGetResponse:
 
 
 class Driver(ABC):
-    def __init__(self, timeout):
-        self.timeout = timeout
+    def __init__(self, **kwargs):
+        self.data_dir = kwargs.get('data_dir')
+        self.timeout = kwargs.get('timeout')
 
     @abstractmethod
     def get(self, url) -> HttpGetResponse:
@@ -25,32 +30,58 @@ class Driver(ABC):
 
 
 class SeleniumDriver(Driver):
-    def __init__(self, timeout):
-        super().__init__(timeout)
-        self.driver_path = '/usr/bin/chromedriver'
-        if not os.path.exists(self.driver_path):
-            raise Exception(f'not found: {self.driver_path}')
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.selenium_path = pathlib.Path('selenium').resolve()
+        self.selenium_path.mkdir(exist_ok=True)
+        self.driver_path = self.selenium_path / 'chromedriver'
+        driver_paths = [
+            '/usr/bin/chromedriver',
+            '/usr/bin/local/chromedriver',
+        ]
+        for driver_path in driver_paths:
+            if os.path.exists(driver_path):
+                # chromedriver needs to be patched to avoid detection, see:
+                # https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver
+                shutil.copy(driver_path, self.driver_path)
+                cmd = ['perl', '-pi', '-e', 's/cdc_/foo_/g', self.driver_path]
+                r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False, text=True)
+                if r.returncode != 0:
+                    logging.warning(f'chromedriver patch failed: {r.stdout}')
+                break
+
+        if not self.driver_path.is_file():
+            raise Exception(f'Selenium Chrome driver not found at {" or ".join(driver_paths)}')
 
         self.options = webdriver.ChromeOptions()
         self.options.headless = True
         self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
+        self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_argument(f'--user-agent="{user_agent}"')
-        self.options.add_argument('--user-data-dir=/data/selenium')
+        self.options.add_argument(f'--user-data-dir={self.selenium_path}')
+        self.options.add_argument('--window-size=1920,1080')
 
     def get(self, url) -> HttpGetResponse:
         # headless chromium crashes somewhat regularly...
         # for now, we will start a fresh instance every time
         with webdriver.Chrome(self.driver_path, options=self.options) as driver:
-            driver.get(url)
+            driver.get(str(url))
+
+            try:
+                filename = self.data_dir / f'{url.nickname}.png'
+                driver.save_screenshot(str(filename))
+            except Exception as e:
+                logging.warning(f'unable to save screenshot of webpage: {e}')
+
             return HttpGetResponse(driver.page_source, url)
 
 
 class RequestsDriver(Driver):
     def get(self, url) -> HttpGetResponse:
-        headers = {'user-agent': user_agent}
-        r = requests.get(url, headers=headers, timeout=self.timeout)
+        headers = {'user-agent': user_agent, 'referrer': 'https://google.com'}
+        r = requests.get(str(url), headers=headers, timeout=self.timeout)
         if not r.ok:
             raise Exception(f'got response with status code {r.status_code} for {url}')
         return HttpGetResponse(r.text, r.url)
@@ -58,8 +89,10 @@ class RequestsDriver(Driver):
 
 class DriverRepo:
     def __init__(self, timeout):
-        self.requests = RequestsDriver(timeout)
-        self.selenium = SeleniumDriver(timeout)
+        self.data_dir = pathlib.Path('data').resolve()
+        self.data_dir.mkdir(exist_ok=True)
+        self.requests = RequestsDriver(data_dir=self.data_dir, timeout=timeout)
+        self.selenium = SeleniumDriver(data_dir=self.data_dir, timeout=timeout)
 
 
 def init_drivers(config):

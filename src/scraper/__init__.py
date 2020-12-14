@@ -1,3 +1,4 @@
+import scraper.adorama
 import scraper.amazon
 import scraper.bestbuy
 import scraper.bhphotovideo
