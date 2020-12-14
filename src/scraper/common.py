@@ -1,6 +1,5 @@
 import locale
 import logging
-import pathlib
 
 # required for price parsing logic
 locale.setlocale(locale.LC_ALL, '')
@@ -59,13 +58,10 @@ class GenericScrapeResult(ScrapeResult):
 class Scraper(ABC):
     def __init__(self, drivers, url):
         self.driver = getattr(drivers, self.get_driver_type())
+        self.filename = drivers.data_dir / f'{url.nickname}.html'
         self.logger = logging.getLogger(url.nickname)
         self.url = url
         self.last_result = None
-
-        data_dir = pathlib.Path('data').resolve()
-        data_dir.mkdir(exist_ok=True)
-        self.filename = data_dir / f'{url.nickname}.html'
         self.logger.info(f'scraper initialized for {self.url}')
 
     @staticmethod
@@ -85,9 +81,8 @@ class Scraper(ABC):
 
     def scrape(self):
         try:
-            url = str(self.url)
             self.logger.debug('starting new scrape')
-            r = self.driver.get(url)
+            r = self.driver.get(self.url)
             with self.filename.open('w') as f:
                 f.write(r.text)
             result_type = self.get_result_type()

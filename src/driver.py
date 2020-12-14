@@ -1,5 +1,7 @@
 import getpass
+import logging
 import os
+import pathlib
 import requests
 
 from abc import ABC, abstractmethod
@@ -16,8 +18,9 @@ class HttpGetResponse:
 
 
 class Driver(ABC):
-    def __init__(self, timeout):
-        self.timeout = timeout
+    def __init__(self, **kwargs):
+        self.data_dir = kwargs.get('data_dir')
+        self.timeout = kwargs.get('timeout')
 
     @abstractmethod
     def get(self, url) -> HttpGetResponse:
@@ -25,8 +28,8 @@ class Driver(ABC):
 
 
 class SeleniumDriver(Driver):
-    def __init__(self, timeout):
-        super().__init__(timeout)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         driver_paths = [
             '/usr/bin/chromedriver',
             '/usr/bin/local/chromedriver',
@@ -47,19 +50,27 @@ class SeleniumDriver(Driver):
             self.options.add_argument('--no-sandbox')  # required if root
         self.options.add_argument(f'--user-agent="{user_agent}"')
         self.options.add_argument('--user-data-dir=/selenium')
+        self.options.add_argument('--window-size=1920,1080')
 
     def get(self, url) -> HttpGetResponse:
         # headless chromium crashes somewhat regularly...
         # for now, we will start a fresh instance every time
         with webdriver.Chrome(self.driver_path, options=self.options) as driver:
-            driver.get(url)
+            driver.get(str(url))
+
+            try:
+                filename = self.data_dir / f'{url.nickname}.png'
+                driver.save_screenshot(str(filename))
+            except Exception as e:
+                logging.warning(f'unable to save screenshot of webpage: {e}')
+
             return HttpGetResponse(driver.page_source, url)
 
 
 class RequestsDriver(Driver):
     def get(self, url) -> HttpGetResponse:
-        headers = {'user-agent': user_agent}
-        r = requests.get(url, headers=headers, timeout=self.timeout)
+        headers = {'user-agent': user_agent, 'referrer': 'https://google.com'}
+        r = requests.get(str(url), headers=headers, timeout=self.timeout)
         if not r.ok:
             raise Exception(f'got response with status code {r.status_code} for {url}')
         return HttpGetResponse(r.text, r.url)
@@ -67,8 +78,10 @@ class RequestsDriver(Driver):
 
 class DriverRepo:
     def __init__(self, timeout):
-        self.requests = RequestsDriver(timeout)
-        self.selenium = SeleniumDriver(timeout)
+        self.data_dir = pathlib.Path('data').resolve()
+        self.data_dir.mkdir(exist_ok=True)
+        self.requests = RequestsDriver(data_dir=self.data_dir, timeout=timeout)
+        self.selenium = SeleniumDriver(data_dir=self.data_dir, timeout=timeout)
 
 
 def init_drivers(config):
