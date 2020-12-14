@@ -83,6 +83,42 @@ These steps *should* work on any supported Docker platform, but they have been s
     $ ./docker_run.bash -c <config_file> -a <discord_or_slack> -w <webhook_url>
     ```
 
+## Configuring Alerters
+
+If you are interested in configuring multiple alerters or would like to keep your alerter settings saved in a file, you can configure inventory-hunter's alerting mechanism using a config file similar to the existing scraper configs.
+
+1. Create a file called alerters.yaml in the config directory.
+
+2. Configure the alerters you would like to use based on this example:
+
+    ```
+    ---
+    alerters:
+      discord:
+        webhook_url: https://discord.com/api/webhooks/XXXXXXXXXXXX...
+        mentions:
+          - XXXXXXXXXXXXXXX
+          - XXXXXXXXXXXXXXX
+      telegram:
+        webhook_url: https://api.telegram.org/botXXXXXXXXXXXXXXXXXXXX/sendMessage
+        chat_id: XXXXXXXX
+      email:
+        sender: myemail@email.com
+        recipients:
+          - myemail@email.com
+          - myfriendsemail@email.com
+        relay: 127.0.0.1
+        password: XXXXXXXXXX   # optional
+    ...
+    ```
+
+3. Add this config file to your run command:
+
+    ```
+    pi@raspberrypi:~/inventory-hunter
+    $ ./docker_run.bash -c ./config/newegg_rtx_3070.yaml -q ./config/alerters.yaml
+    ```
+
 ## How it works
 
 The general idea is if you can get notified as soon as a product becomes in stock, you might have a chance to purchase it before scalpers clear out inventory. This script continually refreshes a set of URLs, looking for the "add to cart" phrase. Once detected, an automated alert is sent, giving you an opportunity to react.

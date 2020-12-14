@@ -20,7 +20,7 @@ alerter="email"
 default_image="ericjmarti/inventory-hunter:latest"
 image=$default_image
 
-while getopts a:c:d:e:i:r:w: arg
+while getopts a:c:d:e:i:q:r:w: arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
@@ -28,6 +28,7 @@ do
         d) chat_id=${OPTARG};;
         e) emails+=(${OPTARG});;
         i) image=${OPTARG};;
+        q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
     esac
@@ -36,7 +37,9 @@ done
 [ -z "$config" ] && usage "missing config argument"
 [ ! -f "$config" ] && usage "$config does not exist or is not a regular file"
 
-if [ "$alerter" = "email" ]; then
+if [ ! -z "$alerter_config" ]; then
+    [ ! -f "$alerter_config" ] && usage "$alerter_config does not exist or is not a regular file"
+elif [ "$alerter" = "email" ]; then
     [ -z "$emails" ] && usage "missing email argument"
     [ -z "$relay" ] && usage "missing relay argument"
 else
@@ -46,13 +49,15 @@ else
     fi
 fi
 
-retcode=0
-[ "$image" = "$default_image" ] || (docker image inspect $image &> /dev/null) || retcode=1
-
-if [ $retcode -ne 0 ]; then
-    echo "the $image docker image does not exist... please build the image and try again"
-    echo "build command: docker build -t $image ."
-    exit 1
+if [ "$image" = "$default_image" ]; then
+    docker pull "$image"
+else
+    result=$(docker images -q $image)
+    if [ -z "$result" ]; then
+        echo "the $image docker image does not exist... please build the image and try again"
+        echo "build command: docker build -t $image ."
+        exit 1
+    fi
 fi
 
 # docker requires absolute paths
@@ -60,15 +65,34 @@ if [ "$(uname)" = "Darwin" ]; then
     if [[ ! "$config" == /* ]]; then
         config="$(pwd -P)/${config#./}"
     fi
+    if [ ! -z "$alerter_config" ] && [[ ! "$alerter_config" == /* ]]; then
+        alerter_config="$(pwd -P)/${alerter_config#./}"
+    fi
 else
     config=$(readlink -f $config)
+    if [ ! -z "$alerter_config" ]; then
+        alerter_config=$(readlink -f $alerter_config)
+    fi
 fi
 
+script_dir=$(cd "$(dirname "$0")" && pwd -P)
+log_dir="$script_dir/log"
+mkdir -p $log_dir
+
 container_name=$(basename $config .yaml)
+data_dir="$script_dir/data/$container_name"
+log_file="$log_dir/$container_name.txt"
+mkdir -p $data_dir
+touch $log_file
 
-docker_run_cmd="docker run -d --name $container_name --network host -v $config:/config.yaml $image --alerter $alerter"
+volumes="-v $data_dir:/data -v $log_file:/log.txt -v $config:/config.yaml"
+[ ! -z "$alerter_config" ] && volumes="$volumes -v $alerter_config:/alerters.yaml"
 
-if [ "$alerter" = "email" ]; then
+docker_run_cmd="docker run -d --rm --name $container_name --network host $volumes $image --alerter $alerter"
+
+if [ ! -z "$alerter_config" ]; then
+    docker_run_cmd="$docker_run_cmd --alerter-config /alerters.yaml"
+elif [ "$alerter" = "email" ]; then
     docker_run_cmd="$docker_run_cmd --email ${emails[@]} --relay $relay"
 else
     docker_run_cmd="$docker_run_cmd --webhook $webhook"

@@ -1,26 +1,14 @@
-import logging
 import random
 import sched
 import sys
-
-from alerter import EmailAlerter, DiscordAlerter, SlackAlerter, TelegramAlerter
 
 
 random.seed()
 
 
 class Engine:
-    def __init__(self, args, config, scrapers):
-
-        alert_types = {
-            "email": EmailAlerter,
-            "discord": DiscordAlerter,
-            "slack": SlackAlerter,
-            "telegram": TelegramAlerter
-        }
-        self.alerter = alert_types[args.alerter_type](args)
-        logging.debug(f"selected alerter: {args.alerter_type} -> {self.alerter}")
-
+    def __init__(self, alerters, config, scrapers):
+        self.alerters = alerters
         self.refresh_interval = config.refresh_interval
         self.max_price = config.max_price
         self.scheduler = sched.scheduler()
@@ -95,8 +83,8 @@ class Engine:
         elif not currently_in_stock and result.has_phrase('are you a human'):
 
             s.logger.error('got "are you a human" prompt')
-            self.alerter('Something went wrong',
-                         f'You need to answer this CAPTCHA and restart this script: {result.url}')
+            self.alerters(subject='Something went wrong',
+                          content=f'You need to answer this CAPTCHA and restart this script: {result.url}')
             sys.exit(1)
 
         else:
@@ -104,9 +92,9 @@ class Engine:
 
     def send_alert(self, s, result, reason):
         s.logger.info(reason)
-        self.alerter(subject=result.alert_subject, content=result.alert_content)
+        self.alerters(subject=result.alert_subject, content=result.alert_content)
 
 
-def hunt(args, config, scrapers):
-    engine = Engine(args, config, scrapers)
+def hunt(alerters, config, scrapers):
+    engine = Engine(alerters, config, scrapers)
     engine.run()
