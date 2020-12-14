@@ -3,12 +3,14 @@ import logging
 import os
 import pathlib
 import requests
+import shutil
+import subprocess
 
 from abc import ABC, abstractmethod
 from selenium import webdriver
 
 
-user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
 
 
 class HttpGetResponse:
@@ -30,26 +32,35 @@ class Driver(ABC):
 class SeleniumDriver(Driver):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.selenium_path = pathlib.Path('selenium').resolve()
+        self.selenium_path.mkdir(exist_ok=True)
+        self.driver_path = self.selenium_path / 'chromedriver'
         driver_paths = [
             '/usr/bin/chromedriver',
             '/usr/bin/local/chromedriver',
         ]
-        self.driver_path = None
         for driver_path in driver_paths:
             if os.path.exists(driver_path):
-                self.driver_path = driver_path
+                # chromedriver needs to be patched to avoid detection, see:
+                # https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver
+                shutil.copy(driver_path, self.driver_path)
+                cmd = ['perl', '-pi', '-e', 's/cdc_/foo_/g', self.driver_path]
+                r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False, text=True)
+                if r.returncode != 0:
+                    logging.warning(f'chromedriver patch failed: {r.stdout}')
                 break
 
-        if not self.driver_path:
-            raise Exception('Selenium Chrome driver not found at ' + ' or '.join(driver_paths))
+        if not self.driver_path.is_file():
+            raise Exception(f'Selenium Chrome driver not found at {" or ".join(driver_paths)}')
 
         self.options = webdriver.ChromeOptions()
         self.options.headless = True
         self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
+        self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_argument(f'--user-agent="{user_agent}"')
-        self.options.add_argument('--user-data-dir=/selenium')
+        self.options.add_argument(f'--user-data-dir={self.selenium_path}')
         self.options.add_argument('--window-size=1920,1080')
 
     def get(self, url) -> HttpGetResponse:
