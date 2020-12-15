@@ -1,0 +1,29 @@
+---
+refresh_interval: 2 # seconds
+max_price: 800 # GBP
+urls:
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-mba-16gb-gddr6-pci-express-graphics-card-very-limited-stock-gx-399-sp.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-red-devil-16gb-pci-express-graphics-card-gx-19w-pc.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-mba-16gb-gddr6-pci-express-graphics-card-very-limited-stock-gx-19r-pc.html
+  - https://www.overclockers.co.uk/asrock-radeon-rx-6800-challenger-pro-16gb-gddr6-pci-express-graphics-card-gx-00e-ak.html
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-pulse-16gb-gddr6-pci-express-graphics-card-gx-39d-sp.html
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-nitro-oc-16gb-gddr6-pci-express-graphics-card-gx-39b-sp.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-fighter-16gb-pci-express-graphics-card-gx-19y-pc.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-red-devil-limited-edition-16gb-pci-express-graphics-card-gx-19v-pc.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-red-dragon-16gb-pci-express-graphics-card-gx-19x-pc.html
+  - https://www.overclockers.co.uk/asrock-radeon-rx-6800-phantom-gaming-16gb-gddr6-pci-express-graphics-card-gx-00d-ak.html
+  - https://www.scan.co.uk/products/asus-radeon-rx-6800-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams-1815mhz-gpu-2105mhz
+  - https://www.scan.co.uk/products/sapphire-radeon-rx-6800-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams-1815mhz-gpu
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams
+  - https://www.scan.co.uk/products/msi-radeon-rx-6800-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams-1700mhz-gpu
+  - https://www.scan.co.uk/products/nda-25-11-2pm-gigabyte-amd-radeon-rx-6800-gaming-oc-16gb-gddr6-graphics-card
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-fighter-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-red-dragon-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams
+  - https://www.scan.co.uk/products/sapphire-radeon-rx-6800-nitroplus-oc-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2
+  - https://www.scan.co.uk/products/asus-radeon-rx-6800-rog-strix-oc-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams
+  - https://www.scan.co.uk/products/asus-radeon-rx-6800-tuf-gaming-oc-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-red-devil-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-3840-streams
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-red-devil-le-16gb-gddr6-ray-tracing-graphics-card-rdna2-3840-streams-1905m
+  - https://www.scan.co.uk/products/radeon-rx6800-16gb-challenger-pro-oc
+  - https://www.scan.co.uk/products/radeon-rx6800-16gb-phantom-gaming-d-oc
+...
