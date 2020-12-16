@@ -1,0 +1,27 @@
+---
+refresh_interval: 2 # seconds
+max_price: 900 # GBP
+urls:
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-xt-mba-16gb-gddr6-pci-express-graphics-card-very-limited-stock-gx-398-sp.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-xt-mba-16gb-gddr6-pci-express-graphics-card-very-limited-stock-gx-19q-pc.html
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-xt-pulse-16gb-gddr6-pci-express-graphics-card-gx-39c-sp.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-xt-red-devil-16gb-pci-express-graphics-card-gx-19t-pc.html
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-xt-nitro-oc-16gb-gddr6-pci-express-graphics-card-gx-453-as.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-xt-red-devil-limited-edition-16gb-pci-express-graphics-card-gx-19s-pc.html
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6800-xt-nitro-oc-se-16gb-gddr6-pci-express-graphics-card-gx-39a-sp.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6800-xt-red-dragon-16gb-pci-express-graphics-card-gx-19u-pc.html
+  - https://www.overclockers.co.uk/asrock-radeon-rx-6800-xt-taichi-16gb-gddr6-pci-express-graphics-card-gx-00c-ak.html
+  - https://www.overclockers.co.uk/asrock-radeon-rx-6800-xt-phantom-gaming-16gb-gddr6-pci-express-graphics-card-gx-00b-ak.html
+  - https://www.scan.co.uk/products/sapphire-radeon-rx-6800-xt-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-4608-streams-2015mhz
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-xt-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-4608-streams
+  - https://www.scan.co.uk/products/nda-25-11-2pm-gigabyte-amd-radeon-rx-6800-xt-gaming-oc-16gb-graphics-card
+  - https://www.scan.co.uk/products/sapphire-radeon-rx-6800-xt-nitroplus-se-16gb-gddr6-ray-tracing-graphics-card-rdna2-4608-streams
+  - https://www.scan.co.uk/products/sapphire-radeon-rx-6800-xt-nitroplus-oc-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-xt-red-dragon-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-4608-stream
+  - https://www.scan.co.uk/products/asus-radeon-rx-6800-xt-tuf-gaming-oc-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-4608-streams
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-xt-red-devil-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-4608-streams
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6800-xt-red-devil-le-16gb-gddr6-ray-tracing-graphics-card-rdna2-4608-streams-20
+  - https://www.scan.co.uk/products/asus-radeon-rx-6800-xt-rog-strix-lc-oc-16gb-gddr6-ray-tracing-graphics-card-rdna2-4608-streams-2110m
+  - https://www.scan.co.uk/products/asrock-radeon-rx-6800-xt-taichi-16gb-gddr6-ray-tracing-graphics-card-7nm-rdna2-4608-stream-1925mhz-g
+  - https://www.novatech.co.uk/products/gigabyte-radeon-rx-6800-xt-gaming-oc-16gb-gddr6-graphics-card/gv-r68xtgamingoc-16gd.html
+...
