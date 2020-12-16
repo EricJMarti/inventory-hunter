@@ -4,6 +4,7 @@ import scraper.bestbuy
 import scraper.bhphotovideo
 import scraper.microcenter
 import scraper.newegg
+import scraper.playstation
 import scraper.walmart
 import scraper.samsclub
 
