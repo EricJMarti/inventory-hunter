@@ -15,6 +15,8 @@ class AmazonScrapeResult(ScrapeResult):
 
         # get listed price
         tag = self.soup.body.select_one('div.a-section > span#price_inside_buybox')
+        if not tag:
+            tag = self.soup.body.select_one('div#price span#priceblock_ourprice')
         price_str = self.set_price(tag)
         if price_str:
             alert_subject = f'In Stock for {price_str}'
