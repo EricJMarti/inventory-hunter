@@ -16,7 +16,7 @@ class ScrapeResult(ABC):
         self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
-        self.price_pattern = re.compile('\\d+(\\.|\\,)\\d{1,2}')
+        self.price_pattern = re.compile('(\\d|\\,)+\\.\\d{1,2}')
         self.last_price = last_result.price if last_result is not None else None
         self.soup = BeautifulSoup(r.text, 'lxml')
         self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
@@ -42,9 +42,8 @@ class ScrapeResult(ABC):
             self.logger.warning(f'unable to find price in string: "{price_str}"')
             return
 
-        re_match = re_match.group().replace(',', '.')
         try:
-            self.price = float(re_match)
+            self.price = locale.atof(re_match.group())
             return price_str
         except Exception as e:
             self.logger.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
