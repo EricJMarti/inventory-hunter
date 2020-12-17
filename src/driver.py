@@ -37,7 +37,7 @@ class SeleniumDriver(Driver):
         self.driver_path = self.selenium_path / 'chromedriver'
         driver_paths = [
             '/usr/bin/chromedriver',
-            '/usr/bin/local/chromedriver',
+            '/usr/local/bin/chromedriver',
         ]
         for driver_path in driver_paths:
             if os.path.exists(driver_path):
