@@ -54,13 +54,13 @@ class SeleniumDriver(Driver):
             raise Exception(f'Selenium Chrome driver not found at {" or ".join(driver_paths)}')
 
         self.options = webdriver.ChromeOptions()
-        self.options.headless = True
         self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
         self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_argument(f'--user-agent="{user_agent}"')
         self.options.add_argument(f'--user-data-dir={self.selenium_path}')
+        self.options.add_argument('--window-position=0,0')
         self.options.add_argument('--window-size=1920,1080')
 
     def get(self, url) -> HttpGetResponse:
