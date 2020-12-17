@@ -1,6 +1,6 @@
 import locale
 import logging
-import pathlib
+import re
 
 # required for price parsing logic
 locale.setlocale(locale.LC_ALL, '')
@@ -16,6 +16,7 @@ class ScrapeResult(ABC):
         self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
+        self.price_pattern = re.compile('(\\d|\\,)+\\.\\d{1,2}')
         self.last_price = last_result.price if last_result is not None else None
         self.soup = BeautifulSoup(r.text, 'lxml')
         self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
@@ -29,6 +30,25 @@ class ScrapeResult(ABC):
         return phrase in self.content
 
     def set_price(self, tag):
+        if not tag:
+            return
+
+        price_str = tag if isinstance(tag, str) else tag.text.strip()
+        if not price_str:
+            return
+
+        re_match = self.price_pattern.search(price_str)
+        if not re_match:
+            self.logger.warning(f'unable to find price in string: "{price_str}"')
+            return
+
+        try:
+            self.price = locale.atof(re_match.group())
+            return price_str
+        except Exception as e:
+            self.logger.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
+
+    def set_price_using_locale(self, tag):
         if not tag:
             return
 
@@ -59,13 +79,10 @@ class GenericScrapeResult(ScrapeResult):
 class Scraper(ABC):
     def __init__(self, drivers, url):
         self.driver = getattr(drivers, self.get_driver_type())
+        self.filename = drivers.data_dir / f'{url.nickname}.html'
         self.logger = logging.getLogger(url.nickname)
         self.url = url
         self.last_result = None
-
-        data_dir = pathlib.Path('data').resolve()
-        data_dir.mkdir(exist_ok=True)
-        self.filename = data_dir / f'{url.nickname}.txt'
         self.logger.info(f'scraper initialized for {self.url}')
 
     @staticmethod
@@ -85,9 +102,8 @@ class Scraper(ABC):
 
     def scrape(self):
         try:
-            url = str(self.url)
             self.logger.debug('starting new scrape')
-            r = self.driver.get(url)
+            r = self.driver.get(self.url)
             with self.filename.open('w') as f:
                 f.write(r.text)
             result_type = self.get_result_type()

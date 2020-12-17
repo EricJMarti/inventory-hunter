@@ -1,38 +1,45 @@
 from scraper.common import ScrapeResult, Scraper, ScraperFactory
 
 
-class AmazonScrapeResult(ScrapeResult):
+class AdoramaScrapeResult(ScrapeResult):
     def parse(self):
         alert_subject = 'In Stock'
         alert_content = ''
 
+        product = self.soup.body.find('div', class_='product-info-container')
+        if not product:
+            tag = self.soup.body.find('div', id='px-captcha')
+            if tag:
+                self.logger.warning('access denied, got a CAPTCHA')
+            else:
+                self.logger.warning(f'missing product info div: {self.url}')
+            return
+
         # get name of product
-        tag = self.soup.body.select_one('h1#title > span#productTitle')
+        tag = product.find('h1')
         if tag:
             alert_content += tag.text.strip() + '\n'
         else:
             self.logger.warning(f'missing title: {self.url}')
 
         # get listed price
-        tag = self.soup.body.select_one('div.a-section > span#price_inside_buybox')
-        if not tag:
-            tag = self.soup.body.select_one('div#price span#priceblock_ourprice')
+        tag = product.find('strong', class_='your-price')
         price_str = self.set_price(tag)
         if price_str:
             alert_subject = f'In Stock for {price_str}'
 
         # check for add to cart button
-        tag = self.soup.body.select_one('span.a-button-inner > span#submit\\.add-to-cart-announce')
+        tag = product.select_one('div.buy-section button.add-to-cart')
         if tag and 'add to cart' in tag.text.lower():
             self.alert_subject = alert_subject
             self.alert_content = f'{alert_content.strip()}\n{self.url}'
 
 
 @ScraperFactory.register
-class AmazonScraper(Scraper):
+class AdoramaScraper(Scraper):
     @staticmethod
     def get_domain():
-        return 'amazon'
+        return 'adorama'
 
     @staticmethod
     def get_driver_type():
@@ -40,4 +47,4 @@ class AmazonScraper(Scraper):
 
     @staticmethod
     def get_result_type():
-        return AmazonScrapeResult
+        return AdoramaScrapeResult

@@ -1,0 +1,15 @@
+---
+refresh_interval: 2 # seconds
+max_price: 1200 # GBP
+urls:
+  - https://www.overclockers.co.uk/sapphire-radeon-rx-6900-xt-mba-16gb-gddr6-pci-express-graphics-card-gx-39e-sp.html
+  - https://www.overclockers.co.uk/powercolor-radeon-rx-6900-xt-mba-16gb-gddr6-pci-express-graphics-card-gx-1a0-pc.html
+  - https://www.overclockers.co.uk/asrock-radeon-rx-6900-xt-mba-16gb-gddr6-pci-express-graphics-card-gx-00f-ak.html
+  - https://www.overclockers.co.uk/asus-radeon-rx-6900-xt-mba-16gb-gddr6-pci-express-graphics-card-gx-457-as.html
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6900-xt-16gb-gddr6-ray-tracing-graphics-card-rdna2-5120-streams
+  - https://www.scan.co.uk/products/sapphire-radeon-rx-6900-xt-16gb-gddr6-ray-tracing-graphics-card-rdna2-5120-streams
+  - https://www.scan.co.uk/products/asrock-radeon-rx-6900-xt-16gb-gddr6-ray-tracing-graphics-card-rdna2-5120-streams-2015mhz-gpu-2250mhz
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6900-xt-red-devil-16gb-gddr6-ray-tracing-graphics-card-rdna2-5120-streams-2015m
+  - https://www.scan.co.uk/products/gigabyte-radeon-rx-6900-xt-16gb-gddr6-ray-tracing-graphics-card-rdna2-5120-streams-2015mhz-gpu-2250m
+  - https://www.scan.co.uk/products/powercolor-radeon-rx-6900-xt-red-devil-le-16gb-gddr6-ray-tracing-graphics-card-rdna2-5120-streams-20
+...
