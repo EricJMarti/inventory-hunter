@@ -6,6 +6,7 @@ import scraper.microcenter
 import scraper.newegg
 import scraper.playstation
 import scraper.walmart
+import scraper.samsclub
 
 from scraper.common import ScraperFactory
 
