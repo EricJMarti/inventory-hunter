@@ -16,7 +16,8 @@ class ScrapeResult(ABC):
         self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
-        self.price_pattern = re.compile('(\\d|\\,)+\\.\\d{1,2}')
+        self.price_pattern = re.compile('\\d{1,3}(?:[.,]\\d{3})*(?:[.,]\\d{2})')
+        self.price_comma_pattern = re.compile('^.*\\,\\d{2}$')
         self.last_price = last_result.price if last_result is not None else None
         self.soup = BeautifulSoup(r.text, 'lxml')
         self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
@@ -42,26 +43,18 @@ class ScrapeResult(ABC):
             self.logger.warning(f'unable to find price in string: "{price_str}"')
             return
 
+        re_match_str = re_match.group()
+        if self.price_comma_pattern.match(re_match_str):
+            comma_index = re_match_str.rfind(',')
+            if comma_index != -1:
+                re_match_str = f'{re_match_str[:comma_index].replace(".", ",")}.{re_match_str[comma_index+1:]}'
+
         try:
-            self.price = locale.atof(re_match.group())
-            return price_str
+            self.price = locale.atof(re_match_str)
         except Exception as e:
             self.logger.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
 
-    def set_price_using_locale(self, tag):
-        if not tag:
-            return
-
-        price_str = tag if isinstance(tag, str) else tag.text.strip()
-        if not price_str:
-            return
-
-        try:
-            currency_symbol = locale.localeconv()['currency_symbol']
-            self.price = locale.atof(price_str.replace(currency_symbol, '').strip())
-            return price_str if price_str else None
-        except Exception as e:
-            self.logger.warning(f'unable to convert "{price_str}" to float... caught exception: {e}')
+        return price_str
 
     @abstractmethod
     def parse(self):
