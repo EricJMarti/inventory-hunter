@@ -24,6 +24,17 @@ class InStockFixture(unittest.TestCase):
         self.assertEqual(self.result.price, 599.66)
 
 
+class InStockDeFixture(unittest.TestCase):
+    def setUp(self):
+        self.result = load_result('in_stock_de.html')
+
+    def test_in_stock(self):
+        self.assertTrue(self.result)
+
+    def test_price(self):
+        self.assertEqual(self.result.price, 1130.00)
+
+
 class OutOfStockFixture(unittest.TestCase):
     def setUp(self):
         self.result = load_result('out_of_stock.html')
