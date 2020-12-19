@@ -16,7 +16,7 @@ class ScrapeResult(ABC):
         self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
-        self.price_pattern = re.compile('\\d{1,3}(?:[.,]\\d{3})*(?:[.,]\\d{2})')
+        self.price_pattern = re.compile('[0-9,.]+')
         self.price_comma_pattern = re.compile('^.*\\,\\d{2}$')
         self.last_price = last_result.price if last_result is not None else None
         self.soup = BeautifulSoup(r.text, 'lxml')
