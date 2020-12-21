@@ -14,6 +14,7 @@ class ScrapeResult(ABC):
         self.alert_subject = None
         self.alert_content = None
         self.captcha = False
+        self.forbidden = True if r.status_code == 403 else False
         self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
@@ -23,7 +24,8 @@ class ScrapeResult(ABC):
         self.soup = BeautifulSoup(r.text, 'lxml')
         self.content = self.soup.body.text.lower()  # lower for case-insensitive searches
         self.url = r.url
-        self.parse()
+        if not self.forbidden:
+            self.parse()
 
     def __bool__(self):
         return bool(self.alert_content)

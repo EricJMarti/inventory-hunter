@@ -41,6 +41,13 @@ class Engine:
         return self.schedule(s)
 
     def process_scrape_result(self, s, result):
+        if result.captcha:
+            s.logger.warning('access denied, got a CAPTCHA')
+            return
+        elif result.forbidden:
+            s.logger.warning('access denied, got HTTP status code 403 (forbidden)')
+            return
+
         currently_in_stock = bool(result)
         previously_in_stock = result.previously_in_stock
         current_price = result.price

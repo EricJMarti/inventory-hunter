@@ -17,9 +17,10 @@ user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 
 
 class HttpGetResponse:
-    def __init__(self, text, url):
+    def __init__(self, text, url, **kwargs):
         self.text = text
         self.url = url
+        self.status_code = kwargs.get('status_code', None)
 
 
 class Driver(ABC):
@@ -91,8 +92,8 @@ class RequestsDriver(Driver):
         headers = {'user-agent': user_agent, 'referrer': 'https://google.com'}
         r = requests.get(str(url), headers=headers, timeout=self.timeout)
         if not r.ok:
-            raise Exception(f'got response with status code {r.status_code} for {url}')
-        return HttpGetResponse(r.text, r.url)
+            logging.debug(f'got response with status code {r.status_code} for {url}')
+        return HttpGetResponse(r.text, r.url, status_code=r.status_code)
 
 
 class DriverRepo:
