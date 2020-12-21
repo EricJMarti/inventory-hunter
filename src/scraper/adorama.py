@@ -6,11 +6,12 @@ class AdoramaScrapeResult(ScrapeResult):
         alert_subject = 'In Stock'
         alert_content = ''
 
+        # detect product or captcha
         product = self.soup.body.find('div', class_='product-info-container')
         if not product:
             tag = self.soup.body.find('div', id='px-captcha')
             if tag:
-                self.logger.warning('access denied, got a CAPTCHA')
+                self.captcha = True
             else:
                 self.logger.warning(f'missing product info div: {self.url}')
             return
