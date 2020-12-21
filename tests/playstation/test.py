@@ -3,7 +3,7 @@ import pathlib
 import unittest
 
 from driver import HttpGetResponse
-from scraper.amazon import AmazonScrapeResult as ScrapeResult
+from scraper.playstation import PlayStationScrapeResult as ScrapeResult
 
 
 def load_result(filename):
@@ -13,31 +13,37 @@ def load_result(filename):
         return ScrapeResult(logging.getLogger(), response, None)
 
 
+class CAPTCHAFixture(unittest.TestCase):
+    def setUp(self):
+        self.result = load_result('captcha.html')
+
+    def test_captcha(self):
+        self.assertTrue(self.result.captcha)
+
+    def test_in_stock(self):
+        self.assertFalse(self.result)
+
+
 class InStockFixture(unittest.TestCase):
     def setUp(self):
         self.result = load_result('in_stock.html')
 
-    def test_in_stock(self):
-        self.assertTrue(self.result)
-
-    def test_price(self):
-        self.assertEqual(self.result.price, 599.66)
-
-
-class InStockDeFixture(unittest.TestCase):
-    def setUp(self):
-        self.result = load_result('in_stock_de.html')
+    def test_captcha(self):
+        self.assertFalse(self.result.captcha)
 
     def test_in_stock(self):
         self.assertTrue(self.result)
 
     def test_price(self):
-        self.assertEqual(self.result.price, 1130.00)
+        self.assertEqual(self.result.price, 9.99)
 
 
 class OutOfStockFixture(unittest.TestCase):
     def setUp(self):
         self.result = load_result('out_of_stock.html')
+
+    def test_captcha(self):
+        self.assertFalse(self.result.captcha)
 
     def test_in_stock(self):
         self.assertFalse(self.result)

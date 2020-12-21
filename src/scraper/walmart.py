@@ -6,6 +6,12 @@ class WalmartScrapeResult(ScrapeResult):
         alert_subject = 'In Stock'
         alert_content = ''
 
+        # detect captcha
+        tag = self.soup.body.find('div', id='px-captcha')
+        if tag:
+            self.captcha = True
+            return
+
         # get name of product
         tag = self.soup.body.select_one('h1.prod-ProductTitle.prod-productTitle-buyBox.font-bold')
         if tag:

@@ -1,6 +1,6 @@
 FROM python:3.9
 RUN apt update
-RUN apt install -y chromium chromium-driver locales locales-all
+RUN apt install -y chromium chromium-driver locales locales-all xvfb
 
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8

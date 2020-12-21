@@ -3,7 +3,7 @@ import pathlib
 import unittest
 
 from driver import HttpGetResponse
-from scraper.adorama import AdoramaScrapeResult as ScrapeResult
+from scraper.walmart import WalmartScrapeResult as ScrapeResult
 
 
 def load_result(filename):
@@ -35,15 +35,4 @@ class InStockFixture(unittest.TestCase):
         self.assertTrue(self.result)
 
     def test_price(self):
-        self.assertEqual(self.result.price, 1455.00)
-
-
-class OutOfStockFixture(unittest.TestCase):
-    def setUp(self):
-        self.result = load_result('out_of_stock.html')
-
-    def test_captcha(self):
-        self.assertFalse(self.result.captcha)
-
-    def test_in_stock(self):
-        self.assertFalse(self.result)
+        self.assertEqual(self.result.price, 499.99)

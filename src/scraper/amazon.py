@@ -15,13 +15,15 @@ class AmazonScrapeResult(ScrapeResult):
 
         # get listed price
         tag = self.soup.body.select_one('div.a-section > span#price_inside_buybox')
+        if not tag:
+            tag = self.soup.body.select_one('div#price span#priceblock_ourprice')
         price_str = self.set_price(tag)
         if price_str:
             alert_subject = f'In Stock for {price_str}'
 
         # check for add to cart button
         tag = self.soup.body.select_one('span.a-button-inner > span#submit\\.add-to-cart-announce')
-        if tag and 'add to cart' in tag.text.lower():
+        if tag:
             self.alert_subject = alert_subject
             self.alert_content = f'{alert_content.strip()}\n{self.url}'
 

@@ -6,9 +6,14 @@ class AdoramaScrapeResult(ScrapeResult):
         alert_subject = 'In Stock'
         alert_content = ''
 
+        # detect product or captcha
         product = self.soup.body.find('div', class_='product-info-container')
         if not product:
-            self.logger.warning(f'missing product info container div: {self.url}')
+            tag = self.soup.body.find('div', id='px-captcha')
+            if tag:
+                self.captcha = True
+            else:
+                self.logger.warning(f'missing product info div: {self.url}')
             return
 
         # get name of product
@@ -25,7 +30,7 @@ class AdoramaScrapeResult(ScrapeResult):
             alert_subject = f'In Stock for {price_str}'
 
         # check for add to cart button
-        tag = self.soup.body.select_one('div.buy-section button.add-to-cart')
+        tag = product.select_one('div.buy-section button.add-to-cart')
         if tag and 'add to cart' in tag.text.lower():
             self.alert_subject = alert_subject
             self.alert_content = f'{alert_content.strip()}\n{self.url}'
