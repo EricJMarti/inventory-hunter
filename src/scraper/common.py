@@ -13,6 +13,7 @@ class ScrapeResult(ABC):
     def __init__(self, logger, r, last_result):
         self.alert_subject = None
         self.alert_content = None
+        self.captcha = False
         self.logger = logger
         self.previously_in_stock = bool(last_result)
         self.price = None
