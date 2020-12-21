@@ -11,6 +11,7 @@ class PlayStationScrapeResult(ScrapeResult):
             tag = self.soup.body.find('div', id='challenge-container')
             if tag:
                 self.logger.warning('access denied, got a CAPTCHA')
+                self.captcha = True
             else:
                 self.logger.warning(f'missing product info div: {self.url}')
             return
