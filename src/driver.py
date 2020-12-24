@@ -67,6 +67,7 @@ class SeleniumDriver(Driver):
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
         self.options.add_argument('--disable-blink-features=AutomationControlled')
+        self.options.add_argument('--disable-dev-shm-usage')
         self.options.add_argument(f'--user-agent="{user_agent}"')
         self.options.add_argument(f'--user-data-dir={self.selenium_path}')
         self.options.add_argument('--window-position=0,0')
