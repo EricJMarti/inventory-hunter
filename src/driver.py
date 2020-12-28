@@ -66,6 +66,7 @@ class SeleniumDriver(Driver):
         self.options.page_load_strategy = 'eager'
         if getpass.getuser() == 'root':
             self.options.add_argument('--no-sandbox')  # required if root
+        self.options.add_argument('--headless')
         self.options.add_argument('--disable-blink-features=AutomationControlled')
         self.options.add_argument('--disable-dev-shm-usage')
         self.options.add_argument(f'--user-agent="{user_agent}"')
