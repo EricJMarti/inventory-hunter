@@ -2,8 +2,11 @@ import getpass
 import logging
 import os
 import pathlib
+import random
+import re
 import requests
 import shutil
+import string
 import subprocess
 
 from abc import ABC, abstractmethod
@@ -44,10 +47,15 @@ class SeleniumDriver(Driver):
                 # chromedriver needs to be patched to avoid detection, see:
                 # https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver
                 shutil.copy(driver_path, self.driver_path)
-                cmd = ['perl', '-pi', '-e', 's/cdc_/foo_/g', self.driver_path]
-                r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False, text=True)
-                if r.returncode != 0:
-                    logging.warning(f'chromedriver patch failed: {r.stdout}')
+                with open(driver_path, 'rb') as f:
+                    variables = set([m.decode('ascii') for m in re.findall(b'cdc_[^\' ]+', f.read())])
+                    for v in variables:
+                        replacement = ''.join(random.choice(string.ascii_letters) for i in range(len(v)))
+                        logging.debug(f'found variable in chromedriver: {v}, replacing with {replacement}')
+                        cmd = ['perl', '-pi', '-e', f's/{v}/{replacement}/g', self.driver_path]
+                        r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False, text=True)
+                        if r.returncode != 0:
+                            logging.warning(f'chromedriver patch failed: {r.stdout}')
                 break
 
         if not self.driver_path.is_file():
