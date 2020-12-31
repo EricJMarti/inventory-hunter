@@ -1,0 +1,8 @@
+---
+refresh_interval: 2 # seconds
+max_price: 650 # dollars/euros/etc
+urls:
+  - https://www.adorama.com/msig3070gxt.html
+  - https://www.adorama.com/png30708tfxb.html
+  - https://www.adorama.com/msig3070sx8.html
+...

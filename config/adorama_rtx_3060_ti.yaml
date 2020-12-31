@@ -1,0 +1,8 @@
+---
+refresh_interval: 2 # seconds
+max_price: 650 # dollars/euros/etc
+urls:
+  - https://www.adorama.com/ev8gp53663.html
+  - https://www.adorama.com/ev8gp53667.html
+  - https://www.adorama.com/msig306tgxt.html
+...
