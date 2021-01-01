@@ -15,6 +15,7 @@ def parse_args():
 
     parser.add_argument('-e', '--email', nargs='+', help='recipient email address(es)')
     parser.add_argument('-r', '--relay', help='IP address of SMTP relay')
+    parser.add_argument('-t', '--test_alerts', action='store_true', help='Send test alert before starting scans')
 
     # discord (or any other webhook based alerter) - related arguments
     parser.add_argument("-w", "--webhook", help="A valid HTTP url for a POST request.", dest="webhook_url")
@@ -57,6 +58,9 @@ def main():
         config = parse_config(args.config)
         drivers = init_drivers(config)
         scrapers = init_scrapers(config, drivers)
+        if args.test_alerts:
+          logging.info("Sending test alert")
+          alerters(subject="This is a test", content="This is only a test")
         hunt(alerters, config, scrapers)
     except Exception:
         logging.exception('caught exception')
