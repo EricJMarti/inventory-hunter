@@ -1,5 +1,6 @@
 beautifulsoup4
 lxml
+pushover
 pytest
 pyyaml
 requests

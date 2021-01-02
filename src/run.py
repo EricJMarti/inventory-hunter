@@ -20,6 +20,10 @@ def parse_args():
     parser.add_argument("-w", "--webhook", help="A valid HTTP url for a POST request.", dest="webhook_url")
     parser.add_argument("-i", "--chat-id", help="Telegram ID number for the chat room", dest="chat_id")
 
+    # pushover-related arguments
+    parser.add_argument('-u', '--user-key', help='Pushover user key', dest='user_key')
+    parser.add_argument('-t', '--api-token', help='Pushover API token', dest='api_token')
+
     return parser.parse_args()
 
 
