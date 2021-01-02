@@ -1,7 +1,7 @@
 beautifulsoup4
 lxml
-pushover
 pytest
+python-pushover
 pyyaml
 requests
 selenium
