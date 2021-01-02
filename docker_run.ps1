@@ -7,7 +7,7 @@ param (
     [String] $Image = "ericjmarti/inventory-hunter:latest",
     [String] $Relay = "",
     [String] $UserKey = "",
-    [String] $AccessToken = "",
+    [String] $ApiToken = "",
     [String] $Webhook = ""
 )
 
@@ -21,7 +21,7 @@ if ($AlerterConfig) {
     if (-Not $relay) { Throw "missing relay argument" }
 } elseif ($Alerter -eq "pushover") {
     if (-Not $userKey) { Throw "missing user key argument" }
-    if (-Not $accessToken) { Throw "missing access token argument" }
+    if (-Not $apiToken) { Throw "missing API token argument" }
 } else {
     if (-Not $webhook) { Throw "missing webhook argument" }
     if ($Alerter -eq "telegram") {
@@ -63,7 +63,7 @@ if ($AlerterConfig) {
 } elseif ($Alerter -eq "email") {
     $DockerRunCmd = "$DockerRunCmd --email $Email --relay $Relay"
 } elseif ($Alerter -eq "pushover") {
-    $DockerRunCmd = "$DockerRunCmd --user-key $UserKey --access-token $AccessToken"
+    $DockerRunCmd = "$DockerRunCmd --user-key $UserKey --api-token $ApiToken"
 } else {
     $DockerRunCmd = "$DockerRunCmd --webhook $Webhook"
     if ($Alerter -eq "telegram") {

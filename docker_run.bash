@@ -9,7 +9,7 @@ usage() {
     echo "  $0 -a DISCORD|SLACK|TELEGRAM -w WEBHOOK_URL [-d TELEGRAM_CHAT_ID] -c CONFIG"
     echo
     echo "usage for pushover:"
-    echo "  $0 -a PUSHOVER -u USER_KEY -t ACCESS_TOKEN -c CONFIG" 
+    echo "  $0 -a PUSHOVER -u USER_KEY -t API_TOKEN -c CONFIG" 
     echo
     echo "usage for email:"
     echo "  $0 -c CONFIG -e EMAIL -r RELAY"
@@ -34,7 +34,7 @@ do
         q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         u) user_key=${OPTARG};;
-        t) access_token=${OPTARG};;
+        t) api_token=${OPTARG};;
         w) webhook=${OPTARG};;
     esac
 done
@@ -49,7 +49,7 @@ elif [ "$alerter" = "email" ]; then
     [ -z "$relay" ] && usage "missing relay argument"
 elif [ "$alerter" = "pushover" ]; then
     [ -z "$user_key" ] && usage "missing user key argument"
-    [ -z "$access_token" ] && usage "missing access token argument"
+    [ -z "$api_token" ] && usage "missing api token argument"
 else
     [ -z "$webhook" ] && usage "missing webhook argument"
     if [ "$alerter" = "telegram" ]; then
@@ -103,7 +103,7 @@ if [ ! -z "$alerter_config" ]; then
 elif [ "$alerter" = "email" ]; then
     docker_run_cmd="$docker_run_cmd --email ${emails[@]} --relay $relay"
 elif [ "$alerter" = "pushover" ]; then
-    docker_run_cmd="$docker_run_cmd --user-key $user_key --access-token $access_token"
+    docker_run_cmd="$docker_run_cmd --user-key $user_key --api-token $api_token"
 else
     docker_run_cmd="$docker_run_cmd --webhook $webhook"
     if [ "$alerter" = "telegram" ]; then
@@ -111,6 +111,7 @@ else
     fi
 fi
 
+echo $docker_run_cmd
 docker_ps_cmd="docker ps -a -f name=$container_name"
 
 # echo "\$ $docker_run_cmd"
