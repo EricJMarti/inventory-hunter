@@ -111,7 +111,6 @@ else
     fi
 fi
 
-echo $docker_run_cmd
 docker_ps_cmd="docker ps -a -f name=$container_name"
 
 # echo "\$ $docker_run_cmd"
