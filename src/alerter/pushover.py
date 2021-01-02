@@ -1,7 +1,7 @@
 import logging
 import traceback
 
-# from pushover import Client
+from pushover import Client
 
 from alerter.common import Alerter, AlerterFactory
 
@@ -30,12 +30,12 @@ class PushoverAlerter(Alerter):
         return 'pushover'
 
     def __call__(self, **kwargs):
-        title = kwargs.get("subject")
-        message = kwargs.get("content")
+        subject = kwargs.get("subject")
+        content = kwargs.get("content")
         try:
             logging.debug(f"Pushover user key: {self.user_key}")
-            # client = Client(self.user_key, api_token=self.api_token)
-            # client.send_message(message, title=title)
+            client = Client(self.user_key, api_token=self.api_token)
+            client.send_message(content, title=subject)
         except Exception:
             logging.error(
                 f"Issue with sending message to Pushover. {traceback.format_exc()}"
