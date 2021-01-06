@@ -3,6 +3,7 @@
 .DS_Store
 .idea/
 .vagrant/
+.vscode/
 __pycache__
 config/alerters.yaml
 data/
