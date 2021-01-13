@@ -59,8 +59,8 @@ def main():
         drivers = init_drivers(config)
         scrapers = init_scrapers(config, drivers)
         if args.test_alerts:
-          logging.info("Sending test alert")
-          alerters(subject="This is a test", content="This is only a test")
+            logging.info("Sending test alert")
+            alerters(subject="This is a test", content="This is only a test")
         hunt(alerters, config, scrapers)
     except Exception:
         logging.exception('caught exception')
