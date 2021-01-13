@@ -31,7 +31,7 @@ do
         q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
-	t) test_alert=1;;
+        t) test_alert=1;;
     esac
 done
 
