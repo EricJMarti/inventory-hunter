@@ -20,7 +20,7 @@ alerter="email"
 default_image="ericjmarti/inventory-hunter:latest"
 image=$default_image
 
-while getopts a:c:d:e:i:q:r:w: arg
+while getopts a:c:d:e:i:q:r:w:t arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
@@ -31,6 +31,7 @@ do
         q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
+	t) test_alert=1;;
     esac
 done
 
@@ -100,10 +101,12 @@ else
         docker_run_cmd="$docker_run_cmd --chat-id $chat_id"
     fi
 fi
-
+if [ $test_alert ]; then
+    docker_run_cmd="$docker_run_cmd -t"
+fi
 docker_ps_cmd="docker ps -a -f name=$container_name"
 
-# echo "\$ $docker_run_cmd"
+echo "\$ $docker_run_cmd"
 eval $docker_run_cmd
 echo
 echo "started docker container named $container_name"
