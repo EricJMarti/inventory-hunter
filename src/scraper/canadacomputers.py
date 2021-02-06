@@ -23,7 +23,7 @@ class CanadaComputersScrapeResult(ScrapeResult):
 
         # check for add to cart button
         tag = self.soup.body.select_one('div[class="pi-prod-availability"]')
-        if tag and 'online in stock' in str(tag).lower():
+        if tag and ('online in stock' in str(tag).lower() or 'online special order' in str(tag).lower()):
             self.alert_subject = alert_subject
             self.alert_content = f'{alert_content.strip()}\n{self.url}'
 
