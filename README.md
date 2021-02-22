@@ -1,8 +1,8 @@
 # Inventory Hunter
 
-![Build](https://github.com/EricJMarti/inventory-hunter/workflows/Build/badge.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/ericjmarti/inventory-hunter) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/ericjmarti/inventory-hunter/latest)
+![Build](https://github.com/phikai/inventory-hunter/workflows/Build/badge.svg) ![Docker Pulls](https://img.shields.io/docker/pulls/phikai/inventory-hunter) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/phikai/inventory-hunter/latest)
 
-This bot helped me snag an RTX 3070... hopefully it will help you get your hands on your next CPU, GPU, or game console.
+This is a FORK of [EricJMarti/inventory-hunter](https://github.com/EricJMarti/inventory-hunter) which uses an alternative image which supports mentions on the Slack Alerter. Will be deprecated if https://github.com/EricJMarti/inventory-hunter/pull/164 is merged.
 
 ## Requirements
 
