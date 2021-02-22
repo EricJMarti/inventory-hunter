@@ -110,6 +110,7 @@ If you are interested in configuring multiple alerters or would like to keep you
         relay: 127.0.0.1
         password: XXXXXXXXXX   # optional
         ssl: True   # optional (default False)
+        mailgun_tracking: False   # optional (default True)
       slack:
         webhook_url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
         mentions:

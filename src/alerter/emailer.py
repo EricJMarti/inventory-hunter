@@ -16,6 +16,7 @@ class EmailAlerter(Alerter):
         self.relay = kwargs.get('relay')
         self.password = kwargs.get('password', None)
         self.ssl = kwargs.get('ssl', False)
+        self.mailgun_tracking = kwargs.get('mailgun_tracking', True)
 
     @classmethod
     def from_args(cls, args):
@@ -31,7 +32,8 @@ class EmailAlerter(Alerter):
         relay = config['relay']
         password = config.get('password', None)
         ssl = config.get('ssl', False)
-        return cls(sender=sender, recipients=recipients, relay=relay, password=password, ssl=ssl)
+        mailgun_tracking = config.get('mailgun_tracking', True)
+        return cls(sender=sender, recipients=recipients, relay=relay, password=password, ssl=ssl, mailgun_tracking=mailgun_tracking)
 
     @staticmethod
     def get_alerter_type():
@@ -49,6 +51,8 @@ class EmailAlerter(Alerter):
             msg["Subject"] = set_subject
         msg["From"] = self.sender
         msg["To"] = ", ".join(self.recipients)
+        if not self.mailgun_tracking:
+            msg.add_header('X-Mailgun-Track-Clicks', 'no')
         if self.ssl:
             with smtplib.SMTP_SSL(self.relay) as s:
                 logging.debug(f"sending ssl email: subject: {set_subject}")
