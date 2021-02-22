@@ -30,7 +30,7 @@ class EmailAlerter(Alerter):
         recipients = config['recipients']
         relay = config['relay']
         password = config.get('password', None)
-        ssl = config.get('ssl', false)
+        ssl = config.get('ssl', False)
         return cls(sender=sender, recipients=recipients, relay=relay, password=password, ssl=ssl)
 
     @staticmethod
