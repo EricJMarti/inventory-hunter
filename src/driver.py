@@ -91,7 +91,7 @@ class SeleniumDriver(Driver):
 
 class RequestsDriver(Driver):
     def get(self, url) -> HttpGetResponse:
-        headers = {'user-agent': user_agent, 'referrer': 'https://google.com'}
+        headers = {'user-agent': user_agent, 'referer': 'https://google.com'}
         r = requests.get(str(url), headers=headers, timeout=self.timeout)
         if not r.ok:
             logging.debug(f'got response with status code {r.status_code} for {url}')
