@@ -27,4 +27,4 @@ add-apt-repository \
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 usermod -G docker $RUN_BY
-sed -i -e 's/\r$//' docker_run.bash
+sed -i -e 's/\r$//' inventoryhunter/docker_run.bash
