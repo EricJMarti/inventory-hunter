@@ -1,6 +1,5 @@
 ---
 refresh_interval: 2 # seconds
 urls:
-  - https://www.bestbuy.com/site/evga-sc-ultra-gaming-nvidia-geforce-gtx-1660-ti-6gb-gddr6-pci-express-3-0-graphics-card-black-gray/6373500.p?skuId=6373500 # this one is a test
   - https://www.bestbuy.com/site/nvidia-geforce-rtx-3080-10gb-gddr6x-pci-express-4-0-graphics-card-titanium-and-black/6429440.p?skuId=6429440
 ...
