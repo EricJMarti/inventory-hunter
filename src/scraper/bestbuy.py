@@ -36,7 +36,7 @@ class BestBuyScraper(Scraper):
 
     @staticmethod
     def get_driver_type():
-        return 'selenium'
+        return 'puppeteer'
 
     @staticmethod
     def get_result_type():

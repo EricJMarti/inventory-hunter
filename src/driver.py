@@ -13,7 +13,7 @@ from abc import ABC, abstractmethod
 from selenium import webdriver
 
 
-user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'
+user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4427.0 Safari/537.36'
 
 
 class HttpGetResponse:
@@ -89,6 +89,26 @@ class SeleniumDriver(Driver):
             return HttpGetResponse(driver.page_source, url)
 
 
+class PuppeteerDriver(Driver):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.script_path = pathlib.Path(__file__).parent.absolute() / 'scrape.js'
+        if not self.script_path.exists():
+            raise Exception(f'does not exist: {self.script_path}')
+
+    def get(self, url) -> HttpGetResponse:
+        html_file = self.data_dir / f'{url.nickname}.html'
+        png_file = self.data_dir / f'{url.nickname}.png'
+        cmd = ['node', self.script_path, str(url), html_file, png_file]
+        r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False, text=True)
+        if r.returncode != 0:
+            logging.warning(f'puppeteer scrape failed: {r.stdout}')
+        else:
+            with open(html_file, 'r') as f:
+                content = f.read()
+                return HttpGetResponse(content, url)
+
+
 class RequestsDriver(Driver):
     def get(self, url) -> HttpGetResponse:
         headers = {'user-agent': user_agent, 'referer': 'https://google.com'}
@@ -104,6 +124,7 @@ class DriverRepo:
         self.data_dir.mkdir(exist_ok=True)
         self.requests = RequestsDriver(data_dir=self.data_dir, timeout=timeout)
         self.selenium = SeleniumDriver(data_dir=self.data_dir, timeout=timeout)
+        self.puppeteer = PuppeteerDriver(data_dir=self.data_dir, timeout=timeout)
 
 
 def init_drivers(config):

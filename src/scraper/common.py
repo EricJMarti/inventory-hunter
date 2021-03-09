@@ -100,8 +100,9 @@ class Scraper(ABC):
         try:
             self.logger.debug('starting new scrape')
             r = self.driver.get(self.url)
-            with self.filename.open('w') as f:
-                f.write(r.text)
+            if self.get_driver_type() != 'puppeteer':
+                with self.filename.open('w') as f:
+                    f.write(r.text)
             result_type = self.get_result_type()
             this_result = result_type(self.logger, r, self.last_result)
             self.last_result = this_result
