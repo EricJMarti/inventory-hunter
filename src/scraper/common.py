@@ -1,3 +1,4 @@
+import datetime
 import locale
 import logging
 import re
@@ -72,11 +73,42 @@ class GenericScrapeResult(ScrapeResult):
             self.alert_content = self.url
 
 
+class ScraperStats:
+    def __init__(self):
+        self.reset()
+
+    def get_failure_rate(self):
+        return 100.0 * self.num_failed / self.get_number_of_scrapes()
+
+    def get_success_rate(self):
+        return 100.0 * self.num_successful / self.get_number_of_scrapes()
+
+    def get_number_of_scrapes(self):
+        total = self.num_successful + self.num_failed
+        return total if total else 1  # to prevent divide by zero
+
+    def reset(self):
+        self.num_successful = 0
+        self.num_failed = 0
+        self.since_time = datetime.datetime.now()
+
+    def __repr__(self):
+        now = datetime.datetime.now()
+        diff = now - self.since_time
+        success_rate = self.get_success_rate()
+        return (
+            f'{self.num_successful} successful scrapes '
+            f'in the last {diff.total_seconds():.0f} seconds '
+            f'({success_rate:.0f}% success rate)'
+        )
+
+
 class Scraper(ABC):
     def __init__(self, drivers, url):
         self.driver = getattr(drivers, self.get_driver_type())
         self.filename = drivers.data_dir / f'{url.nickname}.html'
         self.logger = logging.getLogger(url.nickname)
+        self.stats = ScraperStats()
         self.url = url
         self.last_result = None
         self.logger.info(f'scraper initialized for {self.url}')
@@ -97,6 +129,21 @@ class Scraper(ABC):
         pass
 
     def scrape(self):
+        r = self.scrape_impl()
+
+        if r is not None:
+            self.stats.num_successful += 1
+        else:
+            self.stats.num_failed += 1
+
+        if datetime.datetime.now() - self.stats.since_time > datetime.timedelta(minutes=5):
+            log_level = logging.WARN if self.stats.get_failure_rate() > 0 else logging.INFO
+            self.logger.log(log_level, self.stats)
+            self.stats.reset()
+
+        return r
+
+    def scrape_impl(self):
         try:
             self.logger.debug('starting new scrape')
             r = self.driver.get(self.url)
@@ -110,6 +157,7 @@ class Scraper(ABC):
 
         except Exception as e:
             self.logger.error(f'caught exception during request: {e}')
+            self.stats.num_failed += 1
 
 
 class GenericScraper(Scraper):
