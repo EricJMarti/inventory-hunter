@@ -1,3 +1,6 @@
+import os
+
+
 from scraper.common import ScrapeResult, Scraper, ScraperFactory
 
 
@@ -36,7 +39,10 @@ class BestBuyScraper(Scraper):
 
     @staticmethod
     def get_driver_type():
-        return 'puppeteer'
+        if os.uname().machine == 'x86_64':
+            return 'puppeteer'
+        else:
+            return 'selenium'
 
     @staticmethod
     def get_result_type():
