@@ -14,9 +14,9 @@ class AmazonScrapeResult(ScrapeResult):
             self.logger.warning(f'missing title: {self.url}')
 
         # get listed price
-        tag = self.soup.body.select_one('div.a-section > span#aod-price-1')
+        tag = self.soup.body.select_one('div#aod-price-0.a-section a-spacing-none a-padding-none')
         if not tag:
-            tag = self.soup.body.select_one('div.a-section > span#aod-price-0')
+            tag = self.soup.body.select_one('div#aod-price-1.a-section a-spacing-none a-padding-none')
         price_str = self.set_price(tag)
         if price_str:
             alert_subject = f'In Stock for {price_str}'
