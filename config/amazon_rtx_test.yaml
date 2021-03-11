@@ -1,6 +1,6 @@
 ---
 refresh_interval: 2 # seconds
-max_price: 650 # dollars/euros/etc
+max_price: 50 # dollars/euros/etc
 urls:
   - https://www.amazon.com/PULSE-3D-Wireless-Headset-PlayStation-5/dp/B08FC6QLKN#aod
 ...
