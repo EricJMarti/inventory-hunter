@@ -4,7 +4,7 @@ param (
     [String] $Config = "",
     [String] $ChatId = "",
     [String] $Email = "",
-    [String] $Image = "ericjmarti/inventory-hunter:latest",
+    [String] $Image = "titoubravin/inventory-hunter:latest",
     [String] $Relay = "",
     [String] $Webhook = ""
 )
