@@ -4,6 +4,6 @@
 .idea/
 .vagrant/
 __pycache__
-config/alerters.yaml
+config/private
 data/
 log/
