@@ -1,0 +1,10 @@
+---
+refresh_interval: 1 # seconds
+max_price: 800 # dollars/euros/etc
+urls:
+  - https://www.amazon.com/gp/product/B08L8L71SM#aod
+  - https://www.amazon.com/gp/product/B08M14Y3C7#aod
+  - https://www.amazon.com/gp/product/B08KY266MG#aod
+  - https://www.amazon.com/gp/product/B08M13DXSZ#aod
+  - https://www.amazon.com/gp/product/B08Q7BMHVD#aod  
+...
