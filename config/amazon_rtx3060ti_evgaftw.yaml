@@ -1,6 +1,7 @@
 ---
-refresh_interval: 2 # seconds
+refresh_interval: 1 # seconds
 max_price: 550 # dollars/euros/etc
 urls:
   - https://www.amazon.com/gp/product/B08WGTL4CW#aod
+  - https://www.amazon.com/gp/product/B08FC5L3RG#aod
 ...
