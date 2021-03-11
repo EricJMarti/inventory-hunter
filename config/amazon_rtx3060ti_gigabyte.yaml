@@ -2,5 +2,5 @@
 refresh_interval: 2 # seconds
 max_price: 550 # dollars/euros/etc
 urls:
-  - https://www.amazon.com/gp/product/B08NYP7KG6#aod
+  - 
 ...
