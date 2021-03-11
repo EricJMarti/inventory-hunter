@@ -11,8 +11,8 @@ Vagrant.configure("2") do |config|
 
     hunter.vm.provider "virtualbox" do |v|
       v.gui = false
-      v.memory = "2048"
-      v.cpus = 2
+      v.memory = "16384"
+      v.cpus = 6
     end
 
     hunter.vm.provision "shell", path: "linux_ubuntu_setup.bash", args: "vagrant"
