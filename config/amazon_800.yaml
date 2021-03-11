@@ -4,4 +4,7 @@ max_price: 800 # dollars/euros/etc
 urls:
   - https://www.amazon.com/gp/product/B08MT6B58K#aod
   - https://www.amazon.com/gp/product/B08L8LG4M3#aod
+  - https://www.amazon.com/gp/product/B08L8JNTXQ#aod
+  - https://www.amazon.com/gp/product/B08L8KC1J7#aod
+  - https://www.amazon.com/gp/product/B08L8L9TCZ#aod
 ...
