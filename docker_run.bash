@@ -19,8 +19,9 @@ usage() {
 alerter="email"
 default_image="ericjmarti/inventory-hunter:latest"
 image=$default_image
+network="inventory_hunter"
 
-while getopts a:c:d:e:i:q:r:w:t arg
+while getopts a:c:d:e:i:n:q:r:w:t arg
 do
     case "${arg}" in
         a) alerter=${OPTARG};;
@@ -28,6 +29,7 @@ do
         d) chat_id=${OPTARG};;
         e) emails+=(${OPTARG});;
         i) image=${OPTARG};;
+        n) network=${OPTARG};;
         q) alerter_config=${OPTARG};;
         r) relay=${OPTARG};;
         w) webhook=${OPTARG};;
@@ -89,7 +91,9 @@ touch $log_file
 volumes="-v $data_dir:/data -v $log_file:/log.txt -v $config:/config.yaml"
 [ ! -z "$alerter_config" ] && volumes="$volumes -v $alerter_config:/alerters.yaml"
 
-docker_run_cmd="docker run -d --rm --name $container_name --network host $volumes $image --alerter $alerter"
+(docker network inspect $network &> /dev/null) || docker network create $network
+
+docker_run_cmd="docker run -d --rm --name $container_name --network $network $volumes $image --alerter $alerter"
 
 if [ ! -z "$alerter_config" ]; then
     docker_run_cmd="$docker_run_cmd --alerter-config /alerters.yaml"
