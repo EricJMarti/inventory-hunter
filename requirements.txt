@@ -1,5 +1,8 @@
+aiodns
+aiohttp
 beautifulsoup4
 lxml
+protobuf
 pytest
 pyyaml
 requests
