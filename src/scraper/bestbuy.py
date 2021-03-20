@@ -39,10 +39,7 @@ class BestBuyScraper(Scraper):
 
     @staticmethod
     def get_driver_type():
-        if os.uname().machine == 'x86_64':
-            return 'puppeteer'
-        else:
-            return 'selenium'
+        return 'lean_and_mean'
 
     @staticmethod
     def get_result_type():
