@@ -1,3 +1,4 @@
+import asyncio
 import getpass
 import logging
 import os
@@ -11,6 +12,7 @@ import subprocess
 
 from abc import ABC, abstractmethod
 from selenium import webdriver
+from worker.worker_pb2 import Request, Response
 
 
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4427.0 Safari/537.36'
@@ -118,6 +120,29 @@ class RequestsDriver(Driver):
         return HttpGetResponse(r.text, r.url, status_code=r.status_code)
 
 
+class LeanAndMeanDriver(Driver):
+    def get(self, url) -> HttpGetResponse:
+        return asyncio.run(self.get_impl(url))
+
+    async def get_impl(self, url) -> HttpGetResponse:
+        reader, writer = await asyncio.open_connection('127.0.0.1', 3080)
+        request = Request()
+        request.id = 1337  # doesn't matter right now
+        request.url = str(url)
+        request.timeout = self.timeout
+        writer.write(request.SerializeToString())
+        writer.write_eof()
+        await writer.drain()
+
+        response = Response()
+        response.ParseFromString(await reader.read())
+        logging.debug(f'got response with id {response.id}, status_code: {response.status_code}, data: <{len(response.data)} bytes>')
+        writer.close()
+        await writer.wait_closed()
+
+        return HttpGetResponse(response.data, url, status_code=response.status_code)
+
+
 class DriverRepo:
     def __init__(self, timeout):
         self.data_dir = pathlib.Path('data').resolve()
@@ -125,6 +150,7 @@ class DriverRepo:
         self.requests = RequestsDriver(data_dir=self.data_dir, timeout=timeout)
         self.selenium = SeleniumDriver(data_dir=self.data_dir, timeout=timeout)
         self.puppeteer = PuppeteerDriver(data_dir=self.data_dir, timeout=timeout)
+        self.lean_and_mean = LeanAndMeanDriver(data_dir=self.data_dir, timeout=timeout)
 
 
 def init_drivers(config):
