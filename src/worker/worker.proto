@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package worker;
+
+message Request {
+    optional uint32 id = 1;
+    optional string url = 2;
+    optional uint32 timeout = 3;
+}
+
+message Response {
+    optional uint32 id = 1;
+    optional string data = 2;
+    optional uint32 status_code = 3;
+}
