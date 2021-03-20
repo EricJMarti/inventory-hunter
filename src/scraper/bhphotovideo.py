@@ -38,7 +38,7 @@ class BHPhotoVideoScraper(Scraper):
 
     @staticmethod
     def get_driver_type():
-        return 'requests'
+        return 'lean_and_mean'
 
     @staticmethod
     def get_result_type():
