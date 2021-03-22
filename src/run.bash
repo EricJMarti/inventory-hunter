@@ -10,6 +10,6 @@
 
 # Xvfb $DISPLAY -screen 0 1920x1080x24+32 &
 
-python /src/worker/lean_and_mean.py &
+/src/worker/watchdog.bash python /src/worker/lean_and_mean.py &
 
 python /src/run.py $@
