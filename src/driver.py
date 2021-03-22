@@ -154,5 +154,5 @@ class DriverRepo:
 
 
 def init_drivers(config):
-    timeout = max(config.refresh_interval, 15)  # in seconds
+    timeout = int(max(config.refresh_interval, 15))  # in seconds
     return DriverRepo(timeout)
