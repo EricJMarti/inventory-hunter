@@ -11,8 +11,11 @@ from alerter.common import Alerter, AlerterFactory
 class EmailAlerter(Alerter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.sender = kwargs.get('sender')
-        self.recipients = kwargs.get('recipients')
+        self.sender = kwargs.get('sender').strip()
+        recipients = kwargs.get('recipients')
+        if not isinstance(recipients, list):
+            recipients = [recipients]
+        self.recipients = [r.strip() for r in recipients]
         self.relay = kwargs.get('relay')
         self.password = kwargs.get('password', None)
 
