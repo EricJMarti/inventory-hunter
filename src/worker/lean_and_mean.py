@@ -72,7 +72,7 @@ async def main():
         handler.setLevel(logging.INFO)
         logger.addHandler(handler)
 
-    server = await asyncio.start_server(handle, args.host, args.port)
+    server = await asyncio.start_server(handle, args.host, args.port, reuse_port=True)
     async with server:
         await server.serve_forever()
 
