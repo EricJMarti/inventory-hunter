@@ -41,7 +41,7 @@ class EmailAlerter(Alerter):
     def __call__(self, **kwargs):
         msg = EmailMessage()
 
-        set_subject = kwargs.get("subject")
+        set_subject = kwargs.get("subject").strip()
         set_content = kwargs.get("content")
 
         msg.add_header("Date", formatdate())
