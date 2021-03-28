@@ -1,4 +1,3 @@
-import asyncio
 import getpass
 import logging
 import os
@@ -12,7 +11,7 @@ import subprocess
 
 from abc import ABC, abstractmethod
 from selenium import webdriver
-from worker.worker_pb2 import Request, Response
+import worker
 
 
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4427.0 Safari/537.36'
@@ -121,24 +120,16 @@ class RequestsDriver(Driver):
 
 
 class LeanAndMeanDriver(Driver):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.client = worker.init_client('lean_and_mean')
+
     def get(self, url) -> HttpGetResponse:
-        return asyncio.run(self.get_impl(url))
-
-    async def get_impl(self, url) -> HttpGetResponse:
-        reader, writer = await asyncio.open_connection('127.0.0.1', 3080)
-        request = Request()
-        request.id = 1337  # doesn't matter right now
-        request.url = str(url)
-        request.timeout = self.timeout
-        writer.write(request.SerializeToString())
-        writer.write_eof()
-        await writer.drain()
-
-        response = Response()
-        response.ParseFromString(await reader.read())
-        logging.debug(f'got response with id {response.id}, status_code: {response.status_code}, data: <{len(response.data)} bytes>')
-        writer.close()
-        await writer.wait_closed()
+        response = self.client.get(
+            request_id=1337,  # doesn't matter right now
+            url=str(url),
+            timeout=self.timeout,
+        )
 
         return HttpGetResponse(response.data, url, status_code=response.status_code)
 
