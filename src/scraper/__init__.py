@@ -13,6 +13,7 @@ import scraper.playstation
 import scraper.samsclub
 import scraper.toysrus
 import scraper.walmart
+import scraper.amd
 
 
 from scraper.common import ScraperFactory
