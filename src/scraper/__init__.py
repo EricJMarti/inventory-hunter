@@ -1,5 +1,6 @@
 import scraper.adorama
 import scraper.amazon
+import scraper.amd
 import scraper.bestbuy
 import scraper.bhphotovideo
 import scraper.canadacomputers
@@ -13,7 +14,6 @@ import scraper.playstation
 import scraper.samsclub
 import scraper.toysrus
 import scraper.walmart
-import scraper.amd
 
 
 from scraper.common import ScraperFactory
