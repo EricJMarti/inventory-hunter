@@ -6,11 +6,13 @@ import scraper.bhphotovideo
 import scraper.canadacomputers
 import scraper.costco
 import scraper.ebgames
+import scraper.ebuyer
 import scraper.gamestop
 import scraper.ldlc
 import scraper.microcenter
 import scraper.mikescomputershop
 import scraper.newegg
+import scraper.pccomponentes
 import scraper.playstation
 import scraper.samsclub
 import scraper.toysrus
