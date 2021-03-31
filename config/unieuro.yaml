@@ -1,0 +1,9 @@
+---
+refresh_interval: 2 # seconds
+max_price: 1200
+urls:
+  - https://www.unieuro.it/online/Schede-grafiche/TUF-RTX3060-O12G-GAMING-pidASU90YV0GC0M0NA00
+  - https://www.unieuro.it/online/Schede-grafiche/DUAL-RTX3060TI-O8G-pidASU60YV0G12M0NA00
+  - https://www.unieuro.it/online/Schede-grafiche/DUAL-RTX3070-O8G-pidASU90YV0FQ0M0NA00
+  - https://www.unieuro.it/online/Schede-grafiche/TUF-RTX3080-O10G-GAMING-pidASU90YV0FB1M0NM00
+...
