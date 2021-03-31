@@ -17,8 +17,6 @@ import scraper.unieuro
 import scraper.walmart
 
 
-
-
 from scraper.common import ScraperFactory
 
 
