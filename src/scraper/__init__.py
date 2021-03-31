@@ -7,6 +7,7 @@ import scraper.canadacomputers
 import scraper.costco
 import scraper.ebgames
 import scraper.gamestop
+import scraper.ldlc
 import scraper.microcenter
 import scraper.mikescomputershop
 import scraper.newegg
