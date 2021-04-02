@@ -45,23 +45,28 @@ class SlackAlerter(Alerter):
                         "type": "mrkdwn",
                         "text": kwargs.get("content")
                     }
-                },
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": self.mentions
-                    }
                 }
             ]
         }
+
+        if self.mentions:
+            blocks = _slack_webhook_generated["blocks"]
+            mentions = {
+                "type": "section",
+                "text": {
+                        "type": "mrkdwn",
+                        "text": self.mentions
+                }
+            }
+            blocks.append(mentions)
+
         try:
             logging.debug(f"Slack Webhook URL: {self.webhook_url}")
             send_request = requests.post(
                 self.webhook_url,
                 json=_slack_webhook_generated,
             )
-            if send_request.status_code != 200 and send_request.text == "ok":
+            if send_request.status_code != 200:
                 logging.error(
                     f"There was an issue sending to slack due to an invalid request: {send_request.status_code} -> {send_request.text}"
                 )
