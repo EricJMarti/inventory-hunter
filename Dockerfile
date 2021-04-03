@@ -13,7 +13,7 @@ ENV LANGUAGE en_US.UTF-8
 WORKDIR /
 ARG requirements=requirements.txt
 COPY $requirements /src/requirements.txt
-RUN pip install -r /src/requirements.txt
+RUN pip install -r /src/requirements.txt --no-cache-dir
 COPY VERSION /src/version.txt
 COPY pyproject.toml /src/pyproject.toml
 COPY src /src
