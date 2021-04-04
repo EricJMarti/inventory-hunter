@@ -93,7 +93,9 @@ volumes="-v $data_dir:/data -v $log_file:/log.txt -v $config:/config.yaml"
 
 (docker network inspect $network &> /dev/null) || docker network create $network
 
-docker_run_cmd="docker run -d --rm --name $container_name --network $network $volumes $image --alerter $alerter"
+entrypoint="--entrypoint=/src/run.bash"
+
+docker_run_cmd="docker run -d --rm $entrypoint --name $container_name --network $network $volumes $image --alerter $alerter"
 
 if [ ! -z "$alerter_config" ]; then
     docker_run_cmd="$docker_run_cmd --alerter-config /alerters.yaml"
