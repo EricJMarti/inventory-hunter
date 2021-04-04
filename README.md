@@ -8,7 +8,14 @@ This bot helped me snag an RTX 3070... hopefully it will help you get your hands
 
 - Raspberry Pi 2 or newer (alternatively, you can use an always-on PC or Mac)
 - [Docker](https://www.docker.com/) ([tutorial](https://phoenixnap.com/kb/docker-on-raspberry-pi))
-
+- If Ubuntu you need acces to later packages 
+- If you wish to install directly inside Ubuntu 20.04 WSL 2.0 please install the following:
+-    sudo  apt install -y chromium-browser chromium-chromedriver locales locales-all xvfb
+-    use Debian if you dont have access to snap
+-    install https://chromedriver.chromium.org/
+-    execute run.py in your python environment
+-    
+-    
 You will also need one of the following:
 - [Discord Webhook URL](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 - [Slack Webhook URL](https://api.slack.com/messaging/webhooks)
