@@ -51,7 +51,9 @@ New-Item $LogFile -ItemType File -ea 0 | Out-Null
 $Volumes = "-v ${DataDir}:/data -v ${LogFile}:/log.txt -v ${Config}:/config.yaml"
 if ($AlerterConfig) { $Volumes = "$Volumes -v ${AlerterConfig}:/alerters.yaml" }
 
-$DockerRunCmd = "docker run -d --rm --name $ContainerName --network host $Volumes $Image --alerter $Alerter"
+$Entrypoint = "--entrypoint=/src/run.bash"
+
+$DockerRunCmd = "docker run -d --rm $Entrypoint --name $ContainerName --network host $Volumes $Image --alerter $Alerter"
 
 if ($AlerterConfig) {
     $DockerRunCmd = "$DockerRunCmd --alerter-config /alerters.yaml"
