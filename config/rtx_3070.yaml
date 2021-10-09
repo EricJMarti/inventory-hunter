@@ -1,0 +1,28 @@
+---
+refresh_interval: 2 # seconds
+max_price: 800 # dollars
+urls:
+  - https://www.aussar.es/tarjetas-graficas/palit-geforce-rtx-3070-gamingpro.html
+  # - https://www.coolmod.com/asus-rog-strix-geforce-rtx-3070-oc-v2-gaming-8gb-gddr6-tarjeta-grafica/
+  # - https://www.neobyte.es/gigbyte-rtx-3070-aorus-master-8gb-7770.html
+  # - https://www.neobyte.es/asus-tuf-rtx3070-oc-8gb-v2-gaming-9680.html
+  # - https://www.neobyte.es/gigabyte-rtx-3070-aorus-master-8gb-lhr-tarjeta-grafica-10436.html
+  # - https://www.neobyte.es/gigabyte-rtx-3070-eagle-oc-8gb-tarjeta-grafica-10348.html
+  # - https://www.neobyte.es/asus-dual-rtx-3070-oc-8gb-v2-lhr-9570.html
+  # - https://www.neobyte.es/asus-rog-strix-rtx3070-oc-8gb-v2-gaming-9745.html
+  # - https://www.neobyte.es/asus-dual-rtx-3070-8gb-v2-lhr-9571.html
+  # - https://www.neobyte.es/tarjeta-grafica-gigabyte-rtx3070-eagle-8gb-8779.html
+  # - https://www.neobyte.es/tarjeta-grafica-asus-rog-strix-geforce-rtx-3070-white-edition-8523.html
+  # - https://www.neobyte.es/tarjeta-grafica-asus-strix-rtx3070-oc-8gb-blanca-8206.html
+  # - https://www.neobyte.es/tarjeta-grafica-asus-tuf-rtx-3070-gaming-8gb-8049.html
+  # - https://www.neobyte.es/tarjeta-grafica-asus-tuf-rtx3070-oc-gaming-8gb-7961.html
+  # - https://www.neobyte.es/gigabyte-rtx-3070-vision-oc-8gb-7788.html
+  # - https://www.neobyte.es/gigabyte-rtx-3070-eagle-oc-8gb-7649.html
+  # - https://www.neobyte.es/asus-rog-strix-rtx-3070-8gb-gaming-7292.html
+  # - https://www.neobyte.es/asus-rog-strix-rtx-3070-oc-8gb-gaming-7291.html
+  # - https://www.neobyte.es/asus-tuf-rtx-3070-gaming-8gb-7822.html
+  # - https://www.neobyte.es/asus-dual-rtx-3070-8gb-7294.html
+  # - https://www.neobyte.es/asus-dual-rtx-3070-oc-8gb-7293.html
+  # - https://www.neobyte.es/gigabyte-rtx-3070-gaming-oc-8gb-lhr-10187.html
+  # - https://www.neobyte.es/gigabyte-rtx-3070-gaming-oc-8gb-7484.html
+...

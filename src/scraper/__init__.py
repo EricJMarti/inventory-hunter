@@ -14,6 +14,10 @@ import scraper.playstation
 import scraper.samsclub
 import scraper.toysrus
 import scraper.walmart
+import scraper.pccomponentes
+import scraper.neobyte
+import scraper.coolmod
+import scraper.aussar
 
 
 from scraper.common import ScraperFactory
