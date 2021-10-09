@@ -7,3 +7,7 @@ __pycache__
 config/private
 data/
 log/
+node_modules
+selenium
+log.txt
+config/alerters.yaml
