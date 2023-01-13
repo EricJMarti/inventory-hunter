@@ -5,8 +5,10 @@ import scraper.bestbuy
 import scraper.bhphotovideo
 import scraper.canadacomputers
 import scraper.costco
+import scraper.digikey_de
 import scraper.ebgames
 import scraper.gamestop
+import scraper.jlcpcb
 import scraper.microcenter
 import scraper.mikescomputershop
 import scraper.newegg
