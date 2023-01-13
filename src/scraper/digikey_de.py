@@ -6,7 +6,7 @@ class DigikeyDeScrapeResult(ScrapeResult):
         alert_subject = 'In Stock'
         alert_content = ''
 
-        details = self.soup.body.find('div', id='__layout')
+        details = self.soup.body.select_one('main')
         if details:
 
             # get name of product
@@ -18,7 +18,7 @@ class DigikeyDeScrapeResult(ScrapeResult):
 
             # get listed price
             tag = details.select_one('div[data-testid="vat-tax"] tbody tr + tr > td')
-            extracted_price_str = str(tag)
+            extracted_price_str = str(tag.get_text()).split()[0].replace(',', '.')
             price_str = self.set_price(extracted_price_str)
             if price_str:
                 alert_subject = f'In Stock for {price_str}'
@@ -27,8 +27,8 @@ class DigikeyDeScrapeResult(ScrapeResult):
 
             # check for in-store inventory
             tag = details.select_one('div[data-testid="price-and-procure-title"] span')
-            if tag and 'available order qty' in str(tag).lower():
-                qty = int(str(tag).split()[0])
+            if tag and 'auf lager' in str(tag.get_text()).lower():
+                qty = int(str(tag.get_text()).split()[0])
                 if qty > 0:
                     alert_content += f'Available quantity: {qty}'
                     self.alert_subject = alert_subject
